@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { FileText, LayoutDashboard, Plus, Truck, Building2 } from "lucide-react";
+import { FileText, LayoutDashboard, Plus, Truck, Building2, History } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -27,6 +27,11 @@ const navigationItems = [
     title: "Create Invoice",
     url: createPageUrl("CreateInvoice"),
     icon: Plus,
+  },
+  {
+    title: "Proforma History",
+    url: createPageUrl("ProformaHistory"),
+    icon: History,
   },
   {
     title: "Company Profile",
