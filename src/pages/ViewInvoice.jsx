@@ -35,6 +35,7 @@ export default function ViewInvoice() {
 
   const invoice = invoices.find(inv => inv.id === invoiceId || inv.invoice_number === invoiceId);
   const company = companyProfiles[0];
+  const currencySymbol = invoice?.currency === "TZS" ? "TZS " : "$";
 
   const handlePrint = () => {
     window.print();
@@ -251,15 +252,15 @@ export default function ViewInvoice() {
                         </div>
                       </TableCell>
                       <TableCell className="text-center align-top pt-4">{item.quantity}</TableCell>
-                      <TableCell className="text-right align-top pt-4">${item.price?.toFixed(2)}</TableCell>
-                      <TableCell className="text-right align-top pt-4">${(item.delivery_price || 0).toFixed(2)}</TableCell>
-                      <TableCell className="text-right font-semibold align-top pt-4">${item.total?.toFixed(2)}</TableCell>
+                      <TableCell className="text-right align-top pt-4">{currencySymbol}{item.price?.toLocaleString()}</TableCell>
+                      <TableCell className="text-right align-top pt-4">{currencySymbol}{(item.delivery_price || 0).toLocaleString()}</TableCell>
+                      <TableCell className="text-right font-semibold align-top pt-4">{currencySymbol}{item.total?.toLocaleString()}</TableCell>
                     </TableRow>
                   ))}
                   <TableRow className="bg-blue-50 font-bold">
                     <TableCell colSpan={5} className="text-right">TOTAL AMOUNT</TableCell>
                     <TableCell className="text-right text-lg text-blue-600">
-                      ${invoice.total_amount?.toFixed(2)}
+                      {currencySymbol}{invoice.total_amount?.toLocaleString()}
                     </TableCell>
                   </TableRow>
                 </TableBody>

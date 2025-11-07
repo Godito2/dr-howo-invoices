@@ -30,7 +30,8 @@ export default function EditInvoice() {
     vehicle_plate: "",
     invoice_date: new Date().toISOString().split('T')[0],
     delivery_date: "",
-    items: [{ item: "", description: "", quantity: 1, price: 0, delivery_price: 0, delivery: "", total: 0, images: [] }],
+    currency: "USD",
+    items: [{ item: "", description: "", quantity: 1, price: 0, delivery_price: 0, total: 0, images: [] }],
     notes: "",
     images: [],
     status: "pending"
@@ -54,7 +55,8 @@ export default function EditInvoice() {
         vehicle_plate: invoice.vehicle_plate || "",
         invoice_date: invoice.invoice_date || new Date().toISOString().split('T')[0],
         delivery_date: invoice.delivery_date || "",
-        items: invoice.items || [{ item: "", description: "", quantity: 1, price: 0, delivery_price: 0, delivery: "", total: 0, images: [] }],
+        currency: invoice.currency || "USD",
+        items: invoice.items || [{ item: "", description: "", quantity: 1, price: 0, delivery_price: 0, total: 0, images: [] }],
         notes: invoice.notes || "",
         images: invoice.images || [],
         status: invoice.status || "pending"
@@ -191,12 +193,12 @@ export default function EditInvoice() {
             </CardContent>
           </Card>
 
-          {/* Delivery Information */}
+          {/* Delivery & Currency Information */}
           <Card className="border-none shadow-md">
             <CardHeader>
-              <CardTitle>Delivery Information</CardTitle>
+              <CardTitle>Delivery & Currency</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="delivery_date">Expected Delivery Date</Label>
                 <Input
@@ -205,6 +207,18 @@ export default function EditInvoice() {
                   value={formData.delivery_date}
                   onChange={(e) => handleInputChange('delivery_date', e.target.value)}
                 />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="currency">Currency</Label>
+                <select
+                  id="currency"
+                  value={formData.currency}
+                  onChange={(e) => handleInputChange('currency', e.target.value)}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  <option value="USD">USD ($)</option>
+                  <option value="TZS">TZS (Tanzanian Shilling)</option>
+                </select>
               </div>
             </CardContent>
           </Card>
@@ -218,6 +232,7 @@ export default function EditInvoice() {
               <ItemsTable
                 items={formData.items}
                 onChange={(items) => handleInputChange('items', items)}
+                currency={formData.currency}
               />
             </CardContent>
           </Card>

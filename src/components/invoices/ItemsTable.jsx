@@ -1,34 +1,25 @@
-
 import React from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Plus, Trash2, Upload, X, Loader2 } from "lucide-react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 
-export default function ItemsTable({ items, onChange }) {
+export default function ItemsTable({ items, onChange, currency = "USD" }) {
   const [uploadingIndex, setUploadingIndex] = React.useState(null);
+
+  const currencySymbol = currency === "TZS" ? "TZS" : "$";
 
   const handleItemChange = (index, field, value) => {
     const newItems = [...items];
     
-    // Update the field first
     newItems[index] = {
       ...newItems[index],
       [field]: value
     };
 
-    // Auto-calculate total
     if (field === 'quantity' || field === 'price' || field === 'delivery_price') {
-      const currentItem = newItems[index]; // Use the item with the potentially updated field
+      const currentItem = newItems[index];
       const quantity = parseFloat(currentItem.quantity) || 0;
       const price = parseFloat(currentItem.price) || 0;
       const deliveryPrice = parseFloat(currentItem.delivery_price) || 0;
@@ -110,7 +101,7 @@ export default function ItemsTable({ items, onChange }) {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Delivery Price ($)</label>
+                <label className="text-sm font-medium">Delivery Price ({currencySymbol})</label>
                 <Input
                   type="number"
                   min="0"
@@ -143,7 +134,7 @@ export default function ItemsTable({ items, onChange }) {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Unit Price ($)</label>
+                <label className="text-sm font-medium">Unit Price ({currencySymbol})</label>
                 <Input
                   type="number"
                   min="0"
@@ -155,7 +146,7 @@ export default function ItemsTable({ items, onChange }) {
               <div className="space-y-2">
                 <label className="text-sm font-medium">Total</label>
                 <Input
-                  value={`$${(item.total || 0).toFixed(2)}`}
+                  value={`${currencySymbol}${(item.total || 0).toLocaleString()}`}
                   disabled
                   className="font-semibold bg-white"
                 />
@@ -223,7 +214,7 @@ export default function ItemsTable({ items, onChange }) {
         </Button>
         <div className="text-right">
           <p className="text-sm text-slate-600">Total Amount</p>
-          <p className="text-2xl font-bold text-blue-600">${totalAmount.toFixed(2)}</p>
+          <p className="text-2xl font-bold text-blue-600">{currencySymbol}{totalAmount.toLocaleString()}</p>
         </div>
       </div>
     </div>

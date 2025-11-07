@@ -28,6 +28,7 @@ export default function CreateInvoice() {
     vehicle_plate: "",
     invoice_date: new Date().toISOString().split('T')[0],
     delivery_date: "",
+    currency: "USD",
     items: [{ item: "", description: "", quantity: 1, price: 0, delivery_price: 0, total: 0, images: [] }],
     notes: "",
     images: [],
@@ -157,28 +158,9 @@ export default function CreateInvoice() {
           {/* Delivery Information */}
           <Card className="border-none shadow-md">
             <CardHeader>
-              <CardTitle>Delivery Information</CardTitle>
+              <CardTitle>Delivery & Currency</CardTitle>
             </CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="vehicle_model">Vehicle Model</Label>
-                <Input
-                  id="vehicle_model"
-                  value={formData.vehicle_model}
-                  onChange={(e) => handleInputChange('vehicle_model', e.target.value)}
-                  placeholder="HOWO A7 Truck"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="vehicle_plate">License Plate</Label>
-                <Input
-                  id="vehicle_plate"
-                  value={formData.vehicle_plate}
-                  onChange={(e) => handleInputChange('vehicle_plate', e.target.value)}
-                  placeholder="T 123 ABC"
-                  className="font-mono uppercase"
-                />
-              </div>
+            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="delivery_date">Expected Delivery Date</Label>
                 <Input
@@ -188,8 +170,54 @@ export default function CreateInvoice() {
                   onChange={(e) => handleInputChange('delivery_date', e.target.value)}
                 />
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="currency">Currency</Label>
+                <select
+                  id="currency"
+                  value={formData.currency}
+                  onChange={(e) => handleInputChange('currency', e.target.value)}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  <option value="USD">USD ($)</option>
+                  <option value="TZS">TZS (Tanzanian Shilling)</option>
+                </select>
+              </div>
             </CardContent>
           </Card>
+
+          {/* Vehicle Information (Optional, if needed elsewhere or removed) */}
+          {/* Note: The outline removed vehicle_model and vehicle_plate from the delivery card.
+              If these fields are still needed, they would require a new card or placement.
+              For this task, they are simply omitted from the UI as per instructions. */}
+          {formData.vehicle_model || formData.vehicle_plate ? ( // Render only if data exists
+            <Card className="border-none shadow-md">
+                <CardHeader>
+                    <CardTitle>Vehicle Information (Optional)</CardTitle>
+                </CardHeader>
+                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="vehicle_model">Vehicle Model</Label>
+                        <Input
+                        id="vehicle_model"
+                        value={formData.vehicle_model}
+                        onChange={(e) => handleInputChange('vehicle_model', e.target.value)}
+                        placeholder="HOWO A7 Truck"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="vehicle_plate">License Plate</Label>
+                        <Input
+                        id="vehicle_plate"
+                        value={formData.vehicle_plate}
+                        onChange={(e) => handleInputChange('vehicle_plate', e.target.value)}
+                        placeholder="T 123 ABC"
+                        className="font-mono uppercase"
+                        />
+                    </div>
+                </CardContent>
+            </Card>
+          ) : null}
+
 
           {/* Items Table */}
           <Card className="border-none shadow-md">
@@ -200,6 +228,7 @@ export default function CreateInvoice() {
               <ItemsTable
                 items={formData.items}
                 onChange={(items) => handleInputChange('items', items)}
+                currency={formData.currency}
               />
             </CardContent>
           </Card>
