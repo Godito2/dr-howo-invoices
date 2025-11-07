@@ -330,7 +330,12 @@ export default function ViewInvoice() {
 
       <style jsx>{`
         @media print {
-          body { margin: 0; padding: 0; }
+          body { 
+            margin: 0; 
+            padding: 0;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+          }
           .print\\:hidden { display: none !important; }
           .print\\:shadow-none { box-shadow: none !important; }
           .print\\:h-20 { height: 5rem !important; }
@@ -347,6 +352,36 @@ export default function ViewInvoice() {
             width: 100% !important;
             max-width: 100% !important;
           }
+          
+          /* Preserve colors in print */
+          * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          
+          /* Ensure page breaks don't split items */
+          .border.rounded-lg {
+            page-break-inside: avoid;
+          }
+          
+          /* Keep table formatting */
+          table {
+            width: 100%;
+            border-collapse: collapse;
+          }
+          
+          /* Ensure backgrounds print */
+          .bg-slate-800,
+          .bg-slate-50,
+          .bg-blue-50 {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+        }
+        
+        @page {
+          margin: 0.5cm;
+          size: A4;
         }
       `}</style>
     </div>
