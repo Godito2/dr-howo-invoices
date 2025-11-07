@@ -309,7 +309,9 @@ export default function ViewInvoice() {
             padding: 0;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
+            color-adjust: exact;
           }
+          
           .print\\:hidden { display: none !important; }
           .print\\:shadow-none { box-shadow: none !important; }
           
@@ -326,28 +328,58 @@ export default function ViewInvoice() {
             max-width: 100% !important;
           }
           
-          /* Preserve colors in print */
+          /* Preserve all colors in print */
           * {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
+            color-adjust: exact !important;
           }
           
           /* Ensure page breaks don't split items */
-          .border.rounded-lg {
+          .border.rounded-lg,
+          .border-2.rounded-lg {
             page-break-inside: avoid;
           }
           
-          /* Keep table formatting */
+          /* Keep table formatting and borders */
           table {
             width: 100%;
             border-collapse: collapse;
           }
           
-          /* Ensure backgrounds print */
+          table td,
+          table th {
+            border-color: rgb(203, 213, 225) !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          
+          /* Ensure all backgrounds and borders print */
           .bg-slate-800,
           .bg-slate-50,
           .bg-blue-50,
-          .bg-black {
+          .bg-black,
+          .border-slate-300,
+          .border-r-2,
+          .border-t-2,
+          .border-2 {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+          }
+          
+          /* Ensure black line separator prints */
+          [style*="height: 1mm"] {
+            background-color: black !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          
+          /* Ensure text colors print */
+          .text-blue-600,
+          .text-slate-700,
+          .text-slate-600,
+          .text-white {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
           }
