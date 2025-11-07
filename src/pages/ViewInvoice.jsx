@@ -1,3 +1,4 @@
+
 import React, { useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
@@ -306,7 +307,6 @@ export default function ViewInvoice() {
             </div>
             <div className="mt-6 pt-6 border-t border-slate-700 text-center text-xs text-slate-400">
               <p>Thank you for your business! For inquiries, please contact us.</p>
-              <p className="mt-1">This is a computer-generated proforma invoice.</p>
             </div>
           </div>
         </Card>
