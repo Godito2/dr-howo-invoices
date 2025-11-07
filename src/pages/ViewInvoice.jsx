@@ -284,9 +284,9 @@ export default function ViewInvoice() {
 
             {/* Notes */}
             {invoice.notes && (
-              <div className="bg-slate-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-slate-700 mb-2">Notes</h3>
-                <p className="text-sm text-slate-600 whitespace-pre-wrap">{invoice.notes}</p>
+              <div className="bg-slate-50 p-3 rounded-lg">
+                <h3 className="font-semibold text-slate-700 mb-1 text-sm">Notes</h3>
+                <p className="text-xs text-slate-600 whitespace-pre-wrap">{invoice.notes}</p>
               </div>
             )}
 
