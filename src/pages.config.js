@@ -3,6 +3,7 @@ import CreateInvoice from './pages/CreateInvoice';
 import ViewInvoice from './pages/ViewInvoice';
 import CompanyProfile from './pages/CompanyProfile';
 import ProformaHistory from './pages/ProformaHistory';
+import EditInvoice from './pages/EditInvoice';
 import Layout from './Layout.jsx';
 
 
@@ -12,6 +13,7 @@ export const PAGES = {
     "ViewInvoice": ViewInvoice,
     "CompanyProfile": CompanyProfile,
     "ProformaHistory": ProformaHistory,
+    "EditInvoice": EditInvoice,
 }
 
 export const pagesConfig = {

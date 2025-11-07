@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -9,16 +10,16 @@ import {
   History, 
   Search, 
   Eye, 
-  Download, 
   Calendar,
   DollarSign,
   User,
   Truck,
-  Filter,
-  FileText
+  FileText,
+  Pencil, // Added
+  Trash2 // Added
 } from "lucide-react";
 import { format } from "date-fns";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Added useNavigate
 import { createPageUrl } from "@/utils";
 import {
   Table,
@@ -35,6 +36,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { // Added AlertDialog imports
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const statusColors = {
   pending: "bg-orange-100 text-orange-800 border-orange-200",
@@ -44,14 +55,41 @@ const statusColors = {
 };
 
 export default function ProformaHistory() {
+  const navigate = useNavigate(); // Added useNavigate hook
+  const queryClient = useQueryClient(); // Added useQueryClient hook
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false); // Added state for delete dialog
+  const [invoiceToDelete, setInvoiceToDelete] = useState(null); // Added state for invoice to delete
 
   const { data: invoices = [], isLoading } = useQuery({
     queryKey: ['proforma-invoices'],
     queryFn: () => base44.entities.ProformaInvoice.list('-created_date'),
   });
+
+  // Added delete mutation
+  const deleteMutation = useMutation({
+    mutationFn: (id) => base44.entities.ProformaInvoice.delete(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['proforma-invoices'] });
+      setDeleteDialogOpen(false);
+      setInvoiceToDelete(null);
+    }
+  });
+
+  // Added handler for delete button
+  const handleDelete = (invoice) => {
+    setInvoiceToDelete(invoice);
+    setDeleteDialogOpen(true);
+  };
+
+  // Added function to confirm deletion
+  const confirmDelete = () => {
+    if (invoiceToDelete) {
+      deleteMutation.mutate(invoiceToDelete.id);
+    }
+  };
 
   const filteredInvoices = invoices.filter(invoice => {
     const matchesSearch = !searchQuery || 
@@ -266,12 +304,27 @@ export default function ProformaHistory() {
                           </Badge>
                         </TableCell>
                         <TableCell className="text-right">
-                          <div className="flex justify-end gap-2">
+                          <div className="flex justify-end gap-1">
                             <Link to={createPageUrl(`ViewInvoice?id=${invoice.id}`)}>
-                              <Button variant="ghost" size="sm">
+                              <Button variant="ghost" size="sm" title="View">
                                 <Eye className="w-4 h-4" />
                               </Button>
                             </Link>
+                            {/* Added Edit Button */}
+                            <Link to={createPageUrl(`EditInvoice?id=${invoice.id}`)}>
+                              <Button variant="ghost" size="sm" title="Edit">
+                                <Pencil className="w-4 h-4 text-blue-600" />
+                              </Button>
+                            </Link>
+                            {/* Added Delete Button */}
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              onClick={() => handleDelete(invoice)}
+                              title="Delete"
+                            >
+                              <Trash2 className="w-4 h-4 text-red-600" />
+                            </Button>
                           </div>
                         </TableCell>
                       </TableRow>
@@ -283,6 +336,29 @@ export default function ProformaHistory() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Invoice</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete invoice <span className="font-semibold">{invoiceToDelete?.invoice_number}</span>?
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              className="bg-red-600 hover:bg-red-700"
+              disabled={deleteMutation.isPending}
+            >
+              {deleteMutation.isPending ? "Deleting..." : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
