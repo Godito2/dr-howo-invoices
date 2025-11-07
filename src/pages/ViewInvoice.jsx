@@ -41,18 +41,35 @@ export default function ViewInvoice() {
     window.print();
   };
 
-  const handleShare = () => {
+  const handleShare = async () => {
     const shareUrl = window.location.href;
     const shareText = `Proforma Invoice ${invoice?.invoice_number} - ${company?.company_name || 'Dr Howo Auto Garage'}`;
     
     if (navigator.share) {
-      navigator.share({
-        title: shareText,
-        url: shareUrl
-      });
+      try {
+        await navigator.share({
+          title: shareText,
+          url: shareUrl
+        });
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          try {
+            await navigator.clipboard.writeText(shareUrl);
+            alert("Link copied to clipboard!");
+          } catch (clipboardError) {
+            console.error("Sharing failed:", error);
+            alert("Unable to share. Please copy the URL from your browser.");
+          }
+        }
+      }
     } else {
-      navigator.clipboard.writeText(shareUrl);
-      alert("Link copied to clipboard!");
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        alert("Link copied to clipboard!");
+      } catch (error) {
+        console.error("Clipboard write failed:", error);
+        alert("Unable to copy link. Please copy the URL from your browser.");
+      }
     }
   };
 
