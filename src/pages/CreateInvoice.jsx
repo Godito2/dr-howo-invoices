@@ -44,9 +44,9 @@ export default function CreateInvoice() {
       const random = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
       const invoiceNumber = `DRH-PF-${year}${month}-${random}`;
 
-      // Generate QR code data URL
-      const qrCodeUrl = `${window.location.origin}${createPageUrl(`ViewInvoice?id=${invoiceNumber}`)}`;
-      const qrCodeData = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrCodeUrl)}`;
+      // Generate QR code data URL for Instagram
+      const instagramUrl = `https://www.instagram.com/dr.howo/`;
+      const qrCodeData = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(instagramUrl)}`;
 
       const invoiceData = {
         ...data,
