@@ -249,7 +249,6 @@ export default function ViewInvoice() {
                         {idx + 1}
                       </TableCell>
                       <TableCell className="align-top">
-                        {/* Item Images */}
                         {item.images && item.images.length > 0 && (
                           <div className="mb-3 grid grid-cols-2 gap-2">
                             {item.images.map((img, imgIdx) => (
@@ -257,12 +256,11 @@ export default function ViewInvoice() {
                                 key={imgIdx}
                                 src={img}
                                 alt={`${item.item} - ${imgIdx + 1}`}
-                                className="w-full h-40 object-cover rounded border-2 border-slate-200"
+                                className="w-full h-32 print:h-20 object-cover rounded border-2 border-slate-200"
                               />
                             ))}
                           </div>
                         )}
-                        {/* Item Name and Description */}
                         <div className="font-bold text-base mb-2">{item.item}</div>
                         <div className="text-sm whitespace-pre-wrap text-slate-700">
                           {item.description}
@@ -335,6 +333,7 @@ export default function ViewInvoice() {
           body { margin: 0; padding: 0; }
           .print\\:hidden { display: none !important; }
           .print\\:shadow-none { box-shadow: none !important; }
+          .print\\:h-20 { height: 5rem !important; }
         }
       `}</style>
     </div>
