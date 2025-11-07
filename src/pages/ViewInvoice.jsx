@@ -1,4 +1,3 @@
-
 import React, { useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
@@ -125,59 +124,68 @@ export default function ViewInvoice() {
       <div className="max-w-5xl mx-auto p-4 md:p-8" ref={printRef}>
         <Card className="bg-white shadow-lg print:shadow-none">
           {/* Header with Logo and Company Info */}
-          <div className="border-b-4 border-green-600 p-8">
-            <div className="flex justify-between items-start">
-              <div className="flex items-start gap-6">
+          <div className="p-6 pb-4">
+            <div className="flex justify-between items-start mb-4">
+              {/* Logo */}
+              <div className="flex-shrink-0">
                 {company?.logo_url ? (
                   <img
                     src={company.logo_url}
                     alt="Company Logo"
-                    className="w-32 h-32 object-contain border-4 border-slate-800 p-2 bg-white"
+                    className="w-24 h-24 object-contain border-2 border-slate-800 p-1 bg-white"
                   />
                 ) : (
-                  <div className="w-32 h-32 border-4 border-slate-800 flex items-center justify-center bg-white">
-                    <span className="text-2xl font-bold">LOGO</span>
+                  <div className="w-24 h-24 border-2 border-slate-800 flex items-center justify-center bg-white">
+                    <span className="text-lg font-bold">LOGO</span>
                   </div>
                 )}
-                <div className="flex-1">
-                  <h1 className="text-5xl font-black text-slate-900 tracking-tight uppercase mb-2">
-                    {company?.company_name?.split(',')[0] || 'DR. HOWO'}
-                  </h1>
-                  <h2 className="text-2xl font-bold text-slate-800 tracking-wide uppercase mb-4">
-                    {company?.company_name?.split(',')[1]?.trim() || 'EMENS GROUP LIMITED'}
-                  </h2>
-                  <div className="text-base font-semibold text-slate-700">
-                    {company?.phone_numbers && (
-                      <span>Simu: {company.phone_numbers}</span>
-                    )}
-                    {company?.tin_number && (
-                      <span className="ml-3">| TIN NO: {company.tin_number}</span>
-                    )}
-                  </div>
+              </div>
+
+              {/* Company Name */}
+              <div className="flex-1 text-center px-4">
+                <h1 className="text-4xl font-black text-slate-900 tracking-tight uppercase mb-1">
+                  {company?.company_name?.split(',')[0] || 'DR HOWO'}
+                </h1>
+                <h2 className="text-xl font-bold text-slate-800 tracking-wide uppercase mb-3">
+                  {company?.company_name?.split(',')[1]?.trim() || 'EMENS GROUP LIMITED'}
+                </h2>
+                <div className="text-xs font-medium text-slate-700">
+                  {company?.phone_numbers && (
+                    <span>Simu: {company.phone_numbers}</span>
+                  )}
+                  {company?.tin_number && (
+                    <span className="ml-2">| TIN NO: {company.tin_number}</span>
+                  )}
                 </div>
               </div>
-              <div className="text-right">
+
+              {/* QR Code */}
+              <div className="flex-shrink-0 text-center">
                 {invoice.qr_code_data && (
-                  <div className="mb-2">
-                    <img src={invoice.qr_code_data} alt="QR Code" className="w-24 h-24" />
-                    <p className="text-xs text-slate-500 mt-1">Scan to view online</p>
+                  <div>
+                    <img src={invoice.qr_code_data} alt="QR Code" className="w-20 h-20 mb-1" />
+                    <p className="text-xs text-slate-500">Scan to view online</p>
                   </div>
                 )}
               </div>
             </div>
             
+            {/* Physical Address */}
             {company?.physical_address && (
-              <div className="mt-4 text-sm text-slate-600">
+              <div className="text-xs text-slate-600 text-center">
                 <p>{company.physical_address}</p>
               </div>
             )}
           </div>
 
+          {/* Green Line Separator */}
+          <div className="h-1 bg-green-600"></div>
+
           {/* Invoice Details */}
-          <div className="p-8 space-y-6">
+          <div className="p-6 space-y-4">
             <div className="flex justify-between items-start">
               <div>
-                <h2 className="text-2xl font-bold text-blue-600 mb-4">PROFORMA INVOICE</h2>
+                <h2 className="text-2xl font-bold text-blue-600 mb-3">PROFORMA INVOICE</h2>
                 <div className="space-y-1 text-sm">
                   <p><span className="font-semibold">Invoice Number:</span> {invoice.invoice_number}</p>
                   <p><span className="font-semibold">Date:</span> {invoice.invoice_date && format(new Date(invoice.invoice_date), "MMMM d, yyyy")}</p>
@@ -197,46 +205,14 @@ export default function ViewInvoice() {
               </div>
             </div>
 
-            {/* Vehicle Details */}
-            {(invoice.vehicle_model || invoice.vehicle_plate) && (
-              <div className="bg-blue-50 border-l-4 border-blue-600 p-4 rounded">
-                <h3 className="font-semibold text-slate-700 mb-2">Vehicle Details</h3>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  {invoice.vehicle_model && (
-                    <p><span className="font-semibold">Model:</span> {invoice.vehicle_model}</p>
-                  )}
-                  {invoice.vehicle_plate && (
-                    <p><span className="font-semibold">Plate Number:</span> <span className="font-mono font-bold">{invoice.vehicle_plate}</span></p>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* General Images (if any) */}
-            {invoice.images && invoice.images.length > 0 && (
-              <div>
-                <h3 className="font-semibold text-slate-700 mb-3">Additional Images</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {invoice.images.map((img, idx) => (
-                    <img
-                      key={idx}
-                      src={img}
-                      alt={`Additional ${idx + 1}`}
-                      className="w-full h-32 object-cover rounded-lg border-2 border-slate-200"
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Items Table with Images in Description */}
+            {/* Items Table */}
             <div className="border rounded-lg overflow-hidden">
               <Table>
                 <TableHeader>
                   <TableRow className="bg-slate-50">
-                    <TableHead className="font-bold w-20">Item</TableHead>
+                    <TableHead className="font-bold w-16">Item</TableHead>
                     <TableHead className="font-bold">Description</TableHead>
-                    <TableHead className="font-bold text-center w-32">Quantity<br/>(Units)</TableHead>
+                    <TableHead className="font-bold text-center w-28">Quantity<br/>(Units)</TableHead>
                     <TableHead className="font-bold text-right w-32">Unit<br/>Price</TableHead>
                     <TableHead className="font-bold text-right w-32">Delivery<br/>Price</TableHead>
                     <TableHead className="font-bold text-right w-32">Total</TableHead>
@@ -248,21 +224,21 @@ export default function ViewInvoice() {
                       <TableCell className="font-bold text-center align-top pt-4">
                         {idx + 1}
                       </TableCell>
-                      <TableCell className="align-top">
+                      <TableCell className="align-top py-3">
                         {item.images && item.images.length > 0 && (
-                          <div className="mb-3 grid grid-cols-2 gap-2">
+                          <div className="mb-2 flex gap-2">
                             {item.images.map((img, imgIdx) => (
                               <img
                                 key={imgIdx}
                                 src={img}
                                 alt={`${item.item} - ${imgIdx + 1}`}
-                                className="w-full h-32 print:h-20 object-cover rounded border-2 border-slate-200"
+                                className="w-24 h-24 object-cover rounded border border-slate-300"
                               />
                             ))}
                           </div>
                         )}
-                        <div className="font-bold text-base mb-2">{item.item}</div>
-                        <div className="text-sm whitespace-pre-wrap text-slate-700">
+                        <div className="font-bold text-sm mb-1">{item.item}</div>
+                        <div className="text-xs whitespace-pre-wrap text-slate-700 leading-relaxed">
                           {item.description}
                         </div>
                       </TableCell>
@@ -284,44 +260,41 @@ export default function ViewInvoice() {
 
             {/* Notes */}
             {invoice.notes && (
-              <div className="bg-slate-50 p-3 rounded-lg">
+              <div className="bg-slate-50 p-3 rounded">
                 <h3 className="font-semibold text-slate-700 mb-1 text-sm">Notes</h3>
-                <p className="text-xs text-slate-600 whitespace-pre-wrap">{invoice.notes}</p>
-              </div>
-            )}
-
-            {/* Company Registration Details */}
-            {company?.registration_number && (
-              <div className="text-sm text-slate-600 pt-4 border-t">
-                <p><span className="font-semibold">Registration No:</span> {company.registration_number}</p>
+                <div className="text-xs text-slate-600 whitespace-pre-wrap space-y-0.5">
+                  {invoice.notes.split('\n').map((line, idx) => (
+                    <p key={idx}>{idx + 1}. {line}</p>
+                  ))}
+                </div>
               </div>
             )}
           </div>
 
           {/* Bank Information Footer */}
           <div className="bg-slate-800 text-white p-4">
-            <h3 className="font-bold text-base mb-3">BANK INFORMATION</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            <h3 className="font-bold text-sm mb-2 uppercase">Bank Information</h3>
+            <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-xs">
               <div>
-                <p className="text-slate-300">BENEFICIARY</p>
-                <p className="font-semibold">{company?.company_name || 'Dr Howo Auto Garage Ltd'}</p>
+                <p className="text-slate-400 text-xs">BENEFICIARY</p>
+                <p className="font-semibold">{company?.company_name || 'Dr Howo, Emens Group Limited'}</p>
               </div>
               <div>
-                <p className="text-slate-300">ACCOUNT NUMBER</p>
-                <p className="font-semibold">{company?.bank_account_number || '0123456789'}</p>
+                <p className="text-slate-400 text-xs">ACCOUNT NUMBER</p>
+                <p className="font-semibold">{company?.bank_account_number || '0150943104200'}</p>
               </div>
               <div>
-                <p className="text-slate-300">BRANCH NAME</p>
-                <p className="font-semibold">{company?.bank_branch || 'Dar es Salaam Main Branch'}</p>
+                <p className="text-slate-400 text-xs">BRANCH NAME</p>
+                <p className="font-semibold">{company?.bank_branch || 'TABATA'}</p>
               </div>
               <div>
-                <p className="text-slate-300">BANKERS & ADDRESS</p>
+                <p className="text-slate-400 text-xs">BANKERS & ADDRESS</p>
                 <p className="font-semibold">
-                  {company?.bank_name || 'NMB Bank Plc'}, {company?.bank_address || 'Ohio Street, Dar es Salaam'}
+                  {company?.bank_name || 'CRDB'}, {company?.bank_address || 'DAR ES SALAAM'}
                 </p>
               </div>
             </div>
-            <div className="mt-4 pt-3 border-t border-slate-700 text-center text-xs text-slate-400">
+            <div className="mt-3 pt-2 border-t border-slate-700 text-center text-xs text-slate-400">
               <p>Thank you for your business! For inquiries, please contact us.</p>
             </div>
           </div>
@@ -338,7 +311,6 @@ export default function ViewInvoice() {
           }
           .print\\:hidden { display: none !important; }
           .print\\:shadow-none { box-shadow: none !important; }
-          .print\\:h-20 { height: 5rem !important; }
           
           /* Hide all navigation and chrome elements */
           aside, nav, header, [role="navigation"], [role="banner"] { 
@@ -373,7 +345,8 @@ export default function ViewInvoice() {
           /* Ensure backgrounds print */
           .bg-slate-800,
           .bg-slate-50,
-          .bg-blue-50 {
+          .bg-blue-50,
+          .bg-green-600 {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
           }
