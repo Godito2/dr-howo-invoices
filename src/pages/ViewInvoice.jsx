@@ -334,6 +334,19 @@ export default function ViewInvoice() {
           .print\\:hidden { display: none !important; }
           .print\\:shadow-none { box-shadow: none !important; }
           .print\\:h-20 { height: 5rem !important; }
+          
+          /* Hide all navigation and chrome elements */
+          aside, nav, header, [role="navigation"], [role="banner"] { 
+            display: none !important; 
+          }
+          
+          /* Ensure content takes full width */
+          main, .main-content {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+          }
         }
       `}</style>
     </div>
