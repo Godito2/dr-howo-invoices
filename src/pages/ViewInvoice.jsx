@@ -299,27 +299,30 @@ export default function ViewInvoice() {
           </div>
 
           {/* Bank Information Footer */}
-          <div className="bg-slate-100 p-8">
-            <h3 className="font-bold text-2xl mb-6 text-slate-400 uppercase tracking-wide">BANK INFORMATION</h3>
-            <div className="space-y-6 text-lg">
+          <div className="bg-slate-800 text-white p-4">
+            <h3 className="font-bold text-base mb-3">BANK INFORMATION</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
               <div>
-                <p className="text-slate-400 uppercase tracking-wide mb-1">BENEFICIARY</p>
-                <p className="font-semibold text-slate-600">{company?.company_name || 'Dr Howo, Emens Group Limited'}</p>
+                <p className="text-slate-300">BENEFICIARY</p>
+                <p className="font-semibold">{company?.company_name || 'Dr Howo Auto Garage Ltd'}</p>
               </div>
               <div>
-                <p className="text-slate-400 uppercase tracking-wide mb-1">ACCOUNT NUMBER</p>
-                <p className="font-semibold text-slate-600">{company?.bank_account_number || '0150943104200'}</p>
+                <p className="text-slate-300">ACCOUNT NUMBER</p>
+                <p className="font-semibold">{company?.bank_account_number || '0123456789'}</p>
               </div>
               <div>
-                <p className="text-slate-400 uppercase tracking-wide mb-1">BRANCH NAME</p>
-                <p className="font-semibold text-slate-600">{company?.bank_branch || 'TABATA'}</p>
+                <p className="text-slate-300">BRANCH NAME</p>
+                <p className="font-semibold">{company?.bank_branch || 'Dar es Salaam Main Branch'}</p>
               </div>
               <div>
-                <p className="text-slate-400 uppercase tracking-wide mb-1">BANKERS & ADDRESS</p>
-                <p className="font-semibold text-slate-600">
-                  {company?.bank_name || 'CRDB'}, {company?.bank_address || 'DAR ES SALAAM'}
+                <p className="text-slate-300">BANKERS & ADDRESS</p>
+                <p className="font-semibold">
+                  {company?.bank_name || 'NMB Bank Plc'}, {company?.bank_address || 'Ohio Street, Dar es Salaam'}
                 </p>
               </div>
+            </div>
+            <div className="mt-4 pt-3 border-t border-slate-700 text-center text-xs text-slate-400">
+              <p>Thank you for your business! For inquiries, please contact us.</p>
             </div>
           </div>
         </Card>
