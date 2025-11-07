@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
@@ -36,7 +37,9 @@ export default function Dashboard() {
     pending: invoices.filter(i => i.status === 'pending').length,
     approved: invoices.filter(i => i.status === 'approved').length,
     paid: invoices.filter(i => i.status === 'paid').length,
-    totalAmount: invoices.reduce((sum, inv) => sum + (inv.total_amount || 0), 0)
+    totalAmount: invoices.reduce((sum, inv) => sum + (inv.total_amount || 0), 0),
+    totalAmountUSD: invoices.filter(i => i.currency === 'USD').reduce((sum, inv) => sum + (inv.total_amount || 0), 0),
+    totalAmountTZS: invoices.filter(i => i.currency === 'TZS').reduce((sum, inv) => sum + (inv.total_amount || 0), 0)
   };
 
   return (
@@ -105,9 +108,21 @@ export default function Dashboard() {
               <div className="flex justify-between items-start">
                 <div>
                   <p className="text-sm font-medium text-slate-500">Total Value</p>
-                  <CardTitle className="text-3xl font-bold mt-2">
-                    ${stats.totalAmount.toLocaleString()}
-                  </CardTitle>
+                  <div className="mt-2">
+                    {stats.totalAmountUSD > 0 && (
+                      <CardTitle className="text-2xl font-bold">
+                        ${stats.totalAmountUSD.toLocaleString()}
+                      </CardTitle>
+                    )}
+                    {stats.totalAmountTZS > 0 && (
+                      <CardTitle className="text-xl font-bold text-slate-700">
+                        TZS {stats.totalAmountTZS.toLocaleString()}
+                      </CardTitle>
+                    )}
+                    {stats.totalAmountUSD === 0 && stats.totalAmountTZS === 0 && (
+                      <CardTitle className="text-2xl font-bold">$0</CardTitle>
+                    )}
+                  </div>
                 </div>
                 <div className="p-3 rounded-xl bg-purple-100">
                   <DollarSign className="w-5 h-5 text-purple-600" />
