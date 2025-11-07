@@ -154,10 +154,10 @@ export default function CreateInvoice() {
             </CardContent>
           </Card>
 
-          {/* Vehicle Information */}
+          {/* Delivery Information */}
           <Card className="border-none shadow-md">
             <CardHeader>
-              <CardTitle>Vehicle Information</CardTitle>
+              <CardTitle>Delivery Information</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
@@ -180,7 +180,7 @@ export default function CreateInvoice() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="delivery_date">Delivery Date</Label>
+                <Label htmlFor="delivery_date">Expected Delivery Date</Label>
                 <Input
                   id="delivery_date"
                   type="date"

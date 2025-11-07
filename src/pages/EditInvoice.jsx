@@ -191,33 +191,14 @@ export default function EditInvoice() {
             </CardContent>
           </Card>
 
-          {/* Vehicle Information */}
+          {/* Delivery Information */}
           <Card className="border-none shadow-md">
             <CardHeader>
-              <CardTitle>Vehicle Information</CardTitle>
+              <CardTitle>Delivery Information</CardTitle>
             </CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <CardContent>
               <div className="space-y-2">
-                <Label htmlFor="vehicle_model">Vehicle Model</Label>
-                <Input
-                  id="vehicle_model"
-                  value={formData.vehicle_model}
-                  onChange={(e) => handleInputChange('vehicle_model', e.target.value)}
-                  placeholder="HOWO A7 Truck"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="vehicle_plate">License Plate</Label>
-                <Input
-                  id="vehicle_plate"
-                  value={formData.vehicle_plate}
-                  onChange={(e) => handleInputChange('vehicle_plate', e.target.value)}
-                  placeholder="T 123 ABC"
-                  className="font-mono uppercase"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="delivery_date">Delivery Date</Label>
+                <Label htmlFor="delivery_date">Expected Delivery Date</Label>
                 <Input
                   id="delivery_date"
                   type="date"
