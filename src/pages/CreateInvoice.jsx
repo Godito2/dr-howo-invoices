@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -27,7 +28,7 @@ export default function CreateInvoice() {
     vehicle_plate: "",
     invoice_date: new Date().toISOString().split('T')[0],
     delivery_date: "",
-    items: [{ item: "", description: "", quantity: 1, price: 0, delivery: "", total: 0, images: [] }],
+    items: [{ item: "", description: "", quantity: 1, price: 0, delivery_price: 0, total: 0, images: [] }],
     notes: "",
     images: [],
     status: "pending"

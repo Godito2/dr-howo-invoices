@@ -1,3 +1,4 @@
+
 import React from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
@@ -18,16 +19,21 @@ export default function ItemsTable({ items, onChange }) {
 
   const handleItemChange = (index, field, value) => {
     const newItems = [...items];
+    
+    // Update the field first
     newItems[index] = {
       ...newItems[index],
       [field]: value
     };
 
     // Auto-calculate total
-    if (field === 'quantity' || field === 'price') {
-      const quantity = field === 'quantity' ? parseFloat(value) || 0 : newItems[index].quantity || 0;
-      const price = field === 'price' ? parseFloat(value) || 0 : newItems[index].price || 0;
-      newItems[index].total = quantity * price;
+    if (field === 'quantity' || field === 'price' || field === 'delivery_price') {
+      const currentItem = newItems[index]; // Use the item with the potentially updated field
+      const quantity = parseFloat(currentItem.quantity) || 0;
+      const price = parseFloat(currentItem.price) || 0;
+      const deliveryPrice = parseFloat(currentItem.delivery_price) || 0;
+      
+      newItems[index].total = (quantity * price) + deliveryPrice;
     }
 
     onChange(newItems);
@@ -65,7 +71,7 @@ export default function ItemsTable({ items, onChange }) {
   };
 
   const addItem = () => {
-    onChange([...items, { item: "", description: "", quantity: 1, price: 0, delivery: "", total: 0, images: [] }]);
+    onChange([...items, { item: "", description: "", quantity: 1, price: 0, delivery_price: 0, total: 0, images: [] }]);
   };
 
   const removeItem = (index) => {
@@ -104,11 +110,14 @@ export default function ItemsTable({ items, onChange }) {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Delivery Timeline</label>
+                <label className="text-sm font-medium">Delivery Price ($)</label>
                 <Input
-                  value={item.delivery}
-                  onChange={(e) => handleItemChange(index, 'delivery', e.target.value)}
-                  placeholder="2-3 days"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={item.delivery_price || 0}
+                  onChange={(e) => handleItemChange(index, 'delivery_price', e.target.value)}
+                  placeholder="0.00"
                 />
               </div>
             </div>

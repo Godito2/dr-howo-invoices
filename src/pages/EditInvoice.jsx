@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -29,7 +30,7 @@ export default function EditInvoice() {
     vehicle_plate: "",
     invoice_date: new Date().toISOString().split('T')[0],
     delivery_date: "",
-    items: [{ item: "", description: "", quantity: 1, price: 0, delivery: "", total: 0, images: [] }],
+    items: [{ item: "", description: "", quantity: 1, price: 0, delivery_price: 0, delivery: "", total: 0, images: [] }],
     notes: "",
     images: [],
     status: "pending"
@@ -53,7 +54,7 @@ export default function EditInvoice() {
         vehicle_plate: invoice.vehicle_plate || "",
         invoice_date: invoice.invoice_date || new Date().toISOString().split('T')[0],
         delivery_date: invoice.delivery_date || "",
-        items: invoice.items || [{ item: "", description: "", quantity: 1, price: 0, delivery: "", total: 0, images: [] }],
+        items: invoice.items || [{ item: "", description: "", quantity: 1, price: 0, delivery_price: 0, delivery: "", total: 0, images: [] }],
         notes: invoice.notes || "",
         images: invoice.images || [],
         status: invoice.status || "pending"

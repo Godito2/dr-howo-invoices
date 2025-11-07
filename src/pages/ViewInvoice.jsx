@@ -220,7 +220,7 @@ export default function ViewInvoice() {
                     <TableHead className="font-bold">Description</TableHead>
                     <TableHead className="font-bold text-center w-32">Quantity<br/>(Units)</TableHead>
                     <TableHead className="font-bold text-right w-32">Unit<br/>Price</TableHead>
-                    <TableHead className="font-bold w-32">Delivery</TableHead>
+                    <TableHead className="font-bold text-right w-32">Delivery<br/>Price</TableHead>
                     <TableHead className="font-bold text-right w-32">Total</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -252,7 +252,7 @@ export default function ViewInvoice() {
                       </TableCell>
                       <TableCell className="text-center align-top pt-4">{item.quantity}</TableCell>
                       <TableCell className="text-right align-top pt-4">${item.price?.toFixed(2)}</TableCell>
-                      <TableCell className="align-top pt-4">{item.delivery}</TableCell>
+                      <TableCell className="text-right align-top pt-4">${(item.delivery_price || 0).toFixed(2)}</TableCell>
                       <TableCell className="text-right font-semibold align-top pt-4">${item.total?.toFixed(2)}</TableCell>
                     </TableRow>
                   ))}
