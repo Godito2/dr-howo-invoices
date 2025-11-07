@@ -105,35 +105,36 @@ export default function ViewInvoice() {
       {/* Invoice Content */}
       <div className="max-w-5xl mx-auto p-4 md:p-8" ref={printRef}>
         <Card className="bg-white shadow-lg print:shadow-none">
-          {/* Header with Logo and QR Code */}
-          <div className="border-b-4 border-blue-600 p-8">
+          {/* Header with Logo and Company Info */}
+          <div className="border-b-4 border-green-600 p-8">
             <div className="flex justify-between items-start">
-              <div className="flex items-center gap-4">
+              <div className="flex items-start gap-6">
                 {company?.logo_url ? (
                   <img
                     src={company.logo_url}
                     alt="Company Logo"
-                    className="w-20 h-20 object-contain"
+                    className="w-32 h-32 object-contain border-4 border-slate-800 p-2 bg-white"
                   />
                 ) : (
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
-                    <Truck className="w-10 h-10 text-white" />
+                  <div className="w-32 h-32 border-4 border-slate-800 flex items-center justify-center bg-white">
+                    <Truck className="w-16 h-16 text-slate-800" />
                   </div>
                 )}
-                <div>
-                  <h1 className="text-3xl font-bold text-slate-900">
-                    {company?.company_name || 'Dr Howo'}
+                <div className="flex-1">
+                  <h1 className="text-5xl font-black text-slate-900 tracking-tight uppercase mb-2">
+                    {company?.company_name?.split(',')[0] || 'DR. HOWO'}
                   </h1>
-                  <p className="text-slate-600">Auto Garage Ltd</p>
-                  {company?.physical_address && (
-                    <p className="text-sm text-slate-500 mt-1">{company.physical_address}</p>
-                  )}
-                  {company?.phone_numbers && (
-                    <p className="text-sm text-slate-500">{company.phone_numbers}</p>
-                  )}
-                  {company?.email && (
-                    <p className="text-sm text-slate-500">{company.email}</p>
-                  )}
+                  <h2 className="text-2xl font-bold text-slate-800 tracking-wide uppercase mb-4">
+                    {company?.company_name?.split(',')[1]?.trim() || 'EMENS GROUP LIMITED'}
+                  </h2>
+                  <div className="text-base font-semibold text-slate-700">
+                    {company?.phone_numbers && (
+                      <span>Simu: {company.phone_numbers}</span>
+                    )}
+                    {company?.tin_number && (
+                      <span className="ml-3">| TIN NO: {company.tin_number}</span>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="text-right">
@@ -145,6 +146,12 @@ export default function ViewInvoice() {
                 )}
               </div>
             </div>
+            
+            {company?.physical_address && (
+              <div className="mt-4 text-sm text-slate-600">
+                <p>{company.physical_address}</p>
+              </div>
+            )}
           </div>
 
           {/* Invoice Details */}
@@ -246,14 +253,9 @@ export default function ViewInvoice() {
             )}
 
             {/* Company Registration Details */}
-            {(company?.tin_number || company?.registration_number) && (
-              <div className="grid grid-cols-2 gap-4 text-sm text-slate-600 pt-4 border-t">
-                {company.tin_number && (
-                  <p><span className="font-semibold">TIN:</span> {company.tin_number}</p>
-                )}
-                {company.registration_number && (
-                  <p><span className="font-semibold">Reg No:</span> {company.registration_number}</p>
-                )}
+            {company?.registration_number && (
+              <div className="text-sm text-slate-600 pt-4 border-t">
+                <p><span className="font-semibold">Registration No:</span> {company.registration_number}</p>
               </div>
             )}
           </div>
