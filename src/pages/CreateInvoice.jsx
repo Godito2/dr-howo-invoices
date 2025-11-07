@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, Save, Loader2, Upload, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -27,7 +27,7 @@ export default function CreateInvoice() {
     vehicle_plate: "",
     invoice_date: new Date().toISOString().split('T')[0],
     delivery_date: "",
-    items: [{ item: "", description: "", quantity: 1, price: 0, delivery: "", total: 0 }],
+    items: [{ item: "", description: "", quantity: 1, price: 0, delivery: "", total: 0, images: [] }],
     notes: "",
     images: [],
     status: "pending"
@@ -203,12 +203,13 @@ export default function CreateInvoice() {
             </CardContent>
           </Card>
 
-          {/* Image Upload */}
+          {/* General Images (Optional) */}
           <Card className="border-none shadow-md">
             <CardHeader>
-              <CardTitle>Vehicle/Spare Parts Images</CardTitle>
+              <CardTitle>Additional Images (Optional)</CardTitle>
             </CardHeader>
             <CardContent>
+              <p className="text-sm text-slate-600 mb-4">Upload general images not specific to any item</p>
               <ImageUploader
                 images={formData.images}
                 onChange={(images) => handleInputChange('images', images)}

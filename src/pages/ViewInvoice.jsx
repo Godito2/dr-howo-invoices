@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, Download, Share2, Printer, Truck, Building2 } from "lucide-react";
+import { ArrowLeft, Share2, Printer } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { format } from "date-fns";
@@ -117,7 +117,7 @@ export default function ViewInvoice() {
                   />
                 ) : (
                   <div className="w-32 h-32 border-4 border-slate-800 flex items-center justify-center bg-white">
-                    <Truck className="w-16 h-16 text-slate-800" />
+                    <span className="text-2xl font-bold">LOGO</span>
                   </div>
                 )}
                 <div className="flex-1">
@@ -193,16 +193,16 @@ export default function ViewInvoice() {
               </div>
             )}
 
-            {/* Images */}
+            {/* General Images (if any) */}
             {invoice.images && invoice.images.length > 0 && (
               <div>
-                <h3 className="font-semibold text-slate-700 mb-3">Vehicle/Spare Parts Images</h3>
+                <h3 className="font-semibold text-slate-700 mb-3">Additional Images</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {invoice.images.map((img, idx) => (
                     <img
                       key={idx}
                       src={img}
-                      alt={`Vehicle ${idx + 1}`}
+                      alt={`Additional ${idx + 1}`}
                       className="w-full h-32 object-cover rounded-lg border-2 border-slate-200"
                     />
                   ))}
@@ -210,28 +210,49 @@ export default function ViewInvoice() {
               </div>
             )}
 
-            {/* Items Table */}
+            {/* Items Table with Images in Description */}
             <div className="border rounded-lg overflow-hidden">
               <Table>
                 <TableHeader>
                   <TableRow className="bg-slate-50">
-                    <TableHead className="font-bold">ITEM</TableHead>
-                    <TableHead className="font-bold">DESCRIPTION</TableHead>
-                    <TableHead className="font-bold text-center">QUANTITY</TableHead>
-                    <TableHead className="font-bold text-right">PRICE</TableHead>
-                    <TableHead className="font-bold">DELIVERY</TableHead>
-                    <TableHead className="font-bold text-right">TOTAL</TableHead>
+                    <TableHead className="font-bold w-20">Item</TableHead>
+                    <TableHead className="font-bold">Description</TableHead>
+                    <TableHead className="font-bold text-center w-32">Quantity<br/>(Units)</TableHead>
+                    <TableHead className="font-bold text-right w-32">Unit<br/>Price</TableHead>
+                    <TableHead className="font-bold w-32">Delivery</TableHead>
+                    <TableHead className="font-bold text-right w-32">Total</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {invoice.items?.map((item, idx) => (
                     <TableRow key={idx}>
-                      <TableCell className="font-medium">{item.item}</TableCell>
-                      <TableCell>{item.description}</TableCell>
-                      <TableCell className="text-center">{item.quantity}</TableCell>
-                      <TableCell className="text-right">${item.price?.toFixed(2)}</TableCell>
-                      <TableCell>{item.delivery}</TableCell>
-                      <TableCell className="text-right font-semibold">${item.total?.toFixed(2)}</TableCell>
+                      <TableCell className="font-bold text-center align-top pt-4">
+                        {idx + 1}
+                      </TableCell>
+                      <TableCell className="align-top">
+                        {/* Item Images */}
+                        {item.images && item.images.length > 0 && (
+                          <div className="mb-3 grid grid-cols-2 gap-2">
+                            {item.images.map((img, imgIdx) => (
+                              <img
+                                key={imgIdx}
+                                src={img}
+                                alt={`${item.item} - ${imgIdx + 1}`}
+                                className="w-full h-40 object-cover rounded border-2 border-slate-200"
+                              />
+                            ))}
+                          </div>
+                        )}
+                        {/* Item Name and Description */}
+                        <div className="font-bold text-base mb-2">{item.item}</div>
+                        <div className="text-sm whitespace-pre-wrap text-slate-700">
+                          {item.description}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-center align-top pt-4">{item.quantity}</TableCell>
+                      <TableCell className="text-right align-top pt-4">${item.price?.toFixed(2)}</TableCell>
+                      <TableCell className="align-top pt-4">{item.delivery}</TableCell>
+                      <TableCell className="text-right font-semibold align-top pt-4">${item.total?.toFixed(2)}</TableCell>
                     </TableRow>
                   ))}
                   <TableRow className="bg-blue-50 font-bold">
