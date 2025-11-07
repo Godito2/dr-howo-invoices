@@ -299,9 +299,9 @@ export default function ViewInvoice() {
           </div>
 
           {/* Bank Information Footer */}
-          <div className="bg-slate-800 text-white p-8">
-            <h3 className="font-bold text-lg mb-4">BANK INFORMATION</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div className="bg-slate-800 text-white p-4">
+            <h3 className="font-bold text-base mb-3">BANK INFORMATION</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
               <div>
                 <p className="text-slate-300">BENEFICIARY</p>
                 <p className="font-semibold">{company?.company_name || 'Dr Howo Auto Garage Ltd'}</p>
@@ -321,7 +321,7 @@ export default function ViewInvoice() {
                 </p>
               </div>
             </div>
-            <div className="mt-6 pt-6 border-t border-slate-700 text-center text-xs text-slate-400">
+            <div className="mt-4 pt-3 border-t border-slate-700 text-center text-xs text-slate-400">
               <p>Thank you for your business! For inquiries, please contact us.</p>
             </div>
           </div>
