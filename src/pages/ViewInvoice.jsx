@@ -1,3 +1,4 @@
+
 import React, { useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
@@ -178,8 +179,8 @@ export default function ViewInvoice() {
             )}
           </div>
 
-          {/* Green Line Separator */}
-          <div className="h-1 bg-green-600"></div>
+          {/* Black Line Separator */}
+          <div className="h-1 bg-black"></div>
 
           {/* Invoice Details */}
           <div className="p-6 space-y-4">
@@ -210,11 +211,11 @@ export default function ViewInvoice() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-slate-50">
-                    <TableHead className="font-bold w-16">Item</TableHead>
-                    <TableHead className="font-bold">Description</TableHead>
-                    <TableHead className="font-bold text-center w-28">Quantity<br/>(Units)</TableHead>
-                    <TableHead className="font-bold text-right w-32">Unit<br/>Price</TableHead>
-                    <TableHead className="font-bold text-right w-32">Delivery<br/>Price</TableHead>
+                    <TableHead className="font-bold w-16 border-r border-slate-300">Item</TableHead>
+                    <TableHead className="font-bold border-r border-slate-300">Description</TableHead>
+                    <TableHead className="font-bold text-center w-28 border-r border-slate-300">Quantity<br/>(Units)</TableHead>
+                    <TableHead className="font-bold text-right w-32 border-r border-slate-300">Unit<br/>Price</TableHead>
+                    <TableHead className="font-bold text-right w-32 border-r border-slate-300">Delivery<br/>Price</TableHead>
                     <TableHead className="font-bold text-right w-32">Total</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -346,7 +347,7 @@ export default function ViewInvoice() {
           .bg-slate-800,
           .bg-slate-50,
           .bg-blue-50,
-          .bg-green-600 {
+          .bg-black {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
           }
