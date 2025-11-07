@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { FileText, LayoutDashboard, Plus, Truck } from "lucide-react";
+import { FileText, LayoutDashboard, Plus, Truck, Building2 } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -28,6 +28,11 @@ const navigationItems = [
     url: createPageUrl("CreateInvoice"),
     icon: Plus,
   },
+  {
+    title: "Company Profile",
+    url: createPageUrl("CompanyProfile"),
+    icon: Building2,
+  },
 ];
 
 export default function Layout({ children, currentPageName }) {
@@ -52,7 +57,7 @@ export default function Layout({ children, currentPageName }) {
           <SidebarContent className="p-2">
             <SidebarGroup>
               <SidebarGroupLabel className="text-xs font-medium text-slate-500 uppercase tracking-wider px-2 py-2">
-                Invoicing
+                Menu
               </SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>

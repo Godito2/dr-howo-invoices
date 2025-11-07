@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, Download, Share2, Printer, Truck } from "lucide-react";
+import { ArrowLeft, Download, Share2, Printer, Truck, Building2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { format } from "date-fns";
@@ -27,7 +27,13 @@ export default function ViewInvoice() {
     queryFn: () => base44.entities.ProformaInvoice.list(),
   });
 
+  const { data: companyProfiles = [] } = useQuery({
+    queryKey: ['company-profile'],
+    queryFn: () => base44.entities.CompanyProfile.list(),
+  });
+
   const invoice = invoices.find(inv => inv.id === invoiceId || inv.invoice_number === invoiceId);
+  const company = companyProfiles[0];
 
   const handlePrint = () => {
     window.print();
@@ -35,7 +41,7 @@ export default function ViewInvoice() {
 
   const handleShare = () => {
     const shareUrl = window.location.href;
-    const shareText = `Proforma Invoice ${invoice?.invoice_number} - Dr Howo Auto Garage`;
+    const shareText = `Proforma Invoice ${invoice?.invoice_number} - ${company?.company_name || 'Dr Howo Auto Garage'}`;
     
     if (navigator.share) {
       navigator.share({
@@ -103,13 +109,31 @@ export default function ViewInvoice() {
           <div className="border-b-4 border-blue-600 p-8">
             <div className="flex justify-between items-start">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
-                  <Truck className="w-10 h-10 text-white" />
-                </div>
+                {company?.logo_url ? (
+                  <img
+                    src={company.logo_url}
+                    alt="Company Logo"
+                    className="w-20 h-20 object-contain"
+                  />
+                ) : (
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
+                    <Truck className="w-10 h-10 text-white" />
+                  </div>
+                )}
                 <div>
-                  <h1 className="text-3xl font-bold text-slate-900">Dr Howo</h1>
+                  <h1 className="text-3xl font-bold text-slate-900">
+                    {company?.company_name || 'Dr Howo'}
+                  </h1>
                   <p className="text-slate-600">Auto Garage Ltd</p>
-                  <p className="text-sm text-slate-500">Vehicle & Spare Parts Specialist</p>
+                  {company?.physical_address && (
+                    <p className="text-sm text-slate-500 mt-1">{company.physical_address}</p>
+                  )}
+                  {company?.phone_numbers && (
+                    <p className="text-sm text-slate-500">{company.phone_numbers}</p>
+                  )}
+                  {company?.email && (
+                    <p className="text-sm text-slate-500">{company.email}</p>
+                  )}
                 </div>
               </div>
               <div className="text-right">
@@ -220,6 +244,18 @@ export default function ViewInvoice() {
                 <p className="text-sm text-slate-600 whitespace-pre-wrap">{invoice.notes}</p>
               </div>
             )}
+
+            {/* Company Registration Details */}
+            {(company?.tin_number || company?.registration_number) && (
+              <div className="grid grid-cols-2 gap-4 text-sm text-slate-600 pt-4 border-t">
+                {company.tin_number && (
+                  <p><span className="font-semibold">TIN:</span> {company.tin_number}</p>
+                )}
+                {company.registration_number && (
+                  <p><span className="font-semibold">Reg No:</span> {company.registration_number}</p>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Bank Information Footer */}
@@ -228,19 +264,21 @@ export default function ViewInvoice() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
                 <p className="text-slate-300">BENEFICIARY</p>
-                <p className="font-semibold">Dr Howo Auto Garage Ltd</p>
+                <p className="font-semibold">{company?.company_name || 'Dr Howo Auto Garage Ltd'}</p>
               </div>
               <div>
                 <p className="text-slate-300">ACCOUNT NUMBER</p>
-                <p className="font-semibold">0123456789</p>
+                <p className="font-semibold">{company?.bank_account_number || '0123456789'}</p>
               </div>
               <div>
                 <p className="text-slate-300">BRANCH NAME</p>
-                <p className="font-semibold">Dar es Salaam Main Branch</p>
+                <p className="font-semibold">{company?.bank_branch || 'Dar es Salaam Main Branch'}</p>
               </div>
               <div>
                 <p className="text-slate-300">BANKERS & ADDRESS</p>
-                <p className="font-semibold">NMB Bank Plc, Ohio Street, Dar es Salaam</p>
+                <p className="font-semibold">
+                  {company?.bank_name || 'NMB Bank Plc'}, {company?.bank_address || 'Ohio Street, Dar es Salaam'}
+                </p>
               </div>
             </div>
             <div className="mt-6 pt-6 border-t border-slate-700 text-center text-xs text-slate-400">
