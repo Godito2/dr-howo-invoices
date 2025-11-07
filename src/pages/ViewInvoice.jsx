@@ -179,8 +179,8 @@ export default function ViewInvoice() {
             )}
           </div>
 
-          {/* Black Line Separator */}
-          <div className="h-1 bg-black"></div>
+          {/* Black Line Separator - 1mm */}
+          <div className="h-1 bg-black" style={{height: '1mm'}}></div>
 
           {/* Invoice Details */}
           <div className="p-6 space-y-4">
@@ -207,25 +207,25 @@ export default function ViewInvoice() {
             </div>
 
             {/* Items Table */}
-            <div className="border rounded-lg overflow-hidden">
+            <div className="border-2 border-slate-300 rounded-lg overflow-hidden">
               <Table>
                 <TableHeader>
                   <TableRow className="bg-slate-50">
-                    <TableHead className="font-bold w-16 border-r border-slate-300">Item</TableHead>
-                    <TableHead className="font-bold border-r border-slate-300">Description</TableHead>
-                    <TableHead className="font-bold text-center w-28 border-r border-slate-300">Quantity<br/>(Units)</TableHead>
-                    <TableHead className="font-bold text-right w-32 border-r border-slate-300">Unit<br/>Price</TableHead>
-                    <TableHead className="font-bold text-right w-32 border-r border-slate-300">Delivery<br/>Price</TableHead>
+                    <TableHead className="font-bold w-16 border-r-2 border-slate-300">Item</TableHead>
+                    <TableHead className="font-bold border-r-2 border-slate-300">Description</TableHead>
+                    <TableHead className="font-bold text-center w-28 border-r-2 border-slate-300">Quantity<br/>(Units)</TableHead>
+                    <TableHead className="font-bold text-right w-32 border-r-2 border-slate-300">Unit<br/>Price</TableHead>
+                    <TableHead className="font-bold text-right w-32 border-r-2 border-slate-300">Delivery<br/>Price</TableHead>
                     <TableHead className="font-bold text-right w-32">Total</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {invoice.items?.map((item, idx) => (
-                    <TableRow key={idx}>
-                      <TableCell className="font-bold text-center align-top pt-4">
+                    <TableRow key={idx} className="border-t border-slate-300">
+                      <TableCell className="font-bold text-center align-top pt-4 border-r-2 border-slate-300">
                         {idx + 1}
                       </TableCell>
-                      <TableCell className="align-top py-3">
+                      <TableCell className="align-top py-3 border-r-2 border-slate-300">
                         {item.images && item.images.length > 0 && (
                           <div className="mb-2 flex gap-2">
                             {item.images.map((img, imgIdx) => (
@@ -243,13 +243,13 @@ export default function ViewInvoice() {
                           {item.description}
                         </div>
                       </TableCell>
-                      <TableCell className="text-center align-top pt-4">{item.quantity}</TableCell>
-                      <TableCell className="text-right align-top pt-4">{currencySymbol}{item.price?.toLocaleString()}</TableCell>
-                      <TableCell className="text-right align-top pt-4">{currencySymbol}{(item.delivery_price || 0).toLocaleString()}</TableCell>
+                      <TableCell className="text-center align-top pt-4 border-r-2 border-slate-300">{item.quantity}</TableCell>
+                      <TableCell className="text-right align-top pt-4 border-r-2 border-slate-300">{currencySymbol}{item.price?.toLocaleString()}</TableCell>
+                      <TableCell className="text-right align-top pt-4 border-r-2 border-slate-300">{currencySymbol}{(item.delivery_price || 0).toLocaleString()}</TableCell>
                       <TableCell className="text-right font-semibold align-top pt-4">{currencySymbol}{item.total?.toLocaleString()}</TableCell>
                     </TableRow>
                   ))}
-                  <TableRow className="bg-blue-50 font-bold">
+                  <TableRow className="bg-blue-50 font-bold border-t-2 border-slate-300">
                     <TableCell colSpan={5} className="text-right">TOTAL AMOUNT</TableCell>
                     <TableCell className="text-right text-lg text-blue-600">
                       {currencySymbol}{invoice.total_amount?.toLocaleString()}
