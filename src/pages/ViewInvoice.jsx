@@ -1,3 +1,4 @@
+
 import React, { useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
@@ -539,29 +540,6 @@ export default function ViewInvoice() {
 
             {/* Invoice Details */}
             <div className="p-6 space-y-4 relative">
-              {/* Watermark in Invoice Details Section - rotated -30deg, 6% opacity */}
-              {company?.watermark_url && (
-                <div 
-                  className="absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center pointer-events-none"
-                  style={{
-                    opacity: 0.06,
-                    transform: 'rotate(-30deg)',
-                    WebkitPrintColorAdjust: 'exact',
-                    printColorAdjust: 'exact'
-                  }}
-                >
-                  <img
-                    src={company.watermark_url}
-                    alt="Watermark"
-                    className="w-80 h-80 object-contain"
-                    style={{
-                      WebkitPrintColorAdjust: 'exact',
-                      printColorAdjust: 'exact'
-                    }}
-                  />
-                </div>
-              )}
-
               <div className="flex justify-between items-start relative z-10">
                 <div>
                   <h2 className="text-2xl font-bold mb-3" style={{color: '#002b5c'}}>PROFORMA INVOICE</h2>
