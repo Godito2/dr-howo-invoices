@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, Share2, Printer } from "lucide-react";
+import { ArrowLeft, Share2, Printer, FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { format } from "date-fns";
@@ -38,6 +38,283 @@ export default function ViewInvoice() {
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleExportToWord = () => {
+    if (!invoice) return;
+
+    // Create HTML content for Word document
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>Invoice ${invoice.invoice_number}</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #000;
+          }
+          .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #000;
+            padding-bottom: 20px;
+          }
+          .logo {
+            width: 100px;
+            height: 100px;
+            border: 2px solid #000;
+          }
+          .company-info {
+            text-align: center;
+            flex: 1;
+            padding: 0 20px;
+          }
+          .company-name {
+            font-size: 32px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 0;
+          }
+          .company-subtitle {
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 5px 0;
+          }
+          .company-details {
+            font-size: 11px;
+            margin-top: 10px;
+          }
+          .qr-code {
+            width: 80px;
+            height: 80px;
+          }
+          .invoice-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2563eb;
+            margin: 20px 0;
+          }
+          .invoice-details {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+          }
+          .detail-section {
+            font-size: 13px;
+          }
+          .detail-section p {
+            margin: 5px 0;
+          }
+          .detail-label {
+            font-weight: bold;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            border: 2px solid #cbd5e1;
+          }
+          th, td {
+            border: 2px solid #cbd5e1;
+            padding: 10px;
+            text-align: left;
+          }
+          th {
+            background-color: #f8fafc;
+            font-weight: bold;
+            text-align: center;
+          }
+          .item-description {
+            font-size: 11px;
+            color: #475569;
+            white-space: pre-wrap;
+          }
+          .item-name {
+            font-weight: bold;
+            font-size: 13px;
+          }
+          .total-row {
+            background-color: #eff6ff;
+            font-weight: bold;
+          }
+          .total-amount {
+            font-size: 18px;
+            color: #2563eb;
+          }
+          .notes {
+            background-color: #f8fafc;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+          }
+          .notes h3 {
+            font-size: 13px;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+          }
+          .notes p {
+            font-size: 11px;
+            margin: 3px 0;
+          }
+          .footer {
+            background-color: #1e293b;
+            color: #ffffff;
+            padding: 20px;
+            margin-top: 30px;
+          }
+          .footer h3 {
+            font-size: 13px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 0 0 10px 0;
+          }
+          .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            font-size: 11px;
+          }
+          .footer-label {
+            color: #94a3b8;
+            font-size: 10px;
+            margin-bottom: 3px;
+          }
+          .footer-value {
+            font-weight: bold;
+          }
+          .footer-note {
+            text-align: center;
+            font-size: 10px;
+            color: #94a3b8;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #334155;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div>
+            ${company?.logo_url ? `<img src="${company.logo_url}" alt="Logo" class="logo">` : '<div style="width: 100px; height: 100px; border: 2px solid #000; text-align: center; line-height: 100px; font-weight: bold;">LOGO</div>'}
+          </div>
+          <div class="company-info">
+            <h1 class="company-name">${company?.company_name?.split(',')[0] || 'DR HOWO'}</h1>
+            <h2 class="company-subtitle">${company?.company_name?.split(',')[1]?.trim() || 'EMENS GROUP LIMITED'}</h2>
+            <div class="company-details">
+              ${company?.phone_numbers ? `Simu: ${company.phone_numbers}` : ''}
+              ${company?.tin_number ? ` | TIN NO: ${company.tin_number}` : ''}
+            </div>
+            ${company?.physical_address ? `<div class="company-details">${company.physical_address}</div>` : ''}
+          </div>
+          <div>
+            ${invoice.qr_code_data ? `<img src="${invoice.qr_code_data}" alt="QR Code" class="qr-code"><br><small>Scan to follow us</small>` : ''}
+          </div>
+        </div>
+
+        <h2 class="invoice-title">PROFORMA INVOICE</h2>
+
+        <div class="invoice-details">
+          <div class="detail-section">
+            <p><span class="detail-label">Invoice Number:</span> ${invoice.invoice_number}</p>
+            <p><span class="detail-label">Date:</span> ${invoice.invoice_date ? format(new Date(invoice.invoice_date), "MMMM d, yyyy") : ''}</p>
+            ${invoice.delivery_date ? `<p><span class="detail-label">Expected Delivery:</span> ${format(new Date(invoice.delivery_date), "MMMM d, yyyy")}</p>` : ''}
+          </div>
+          <div class="detail-section" style="text-align: right;">
+            <p class="detail-label">Bill To:</p>
+            <p style="font-weight: bold;">${invoice.customer_name}</p>
+            ${invoice.customer_phone ? `<p>${invoice.customer_phone}</p>` : ''}
+            ${invoice.customer_email ? `<p>${invoice.customer_email}</p>` : ''}
+            ${invoice.address ? `<p>${invoice.address}</p>` : ''}
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 50px;">Item</th>
+              <th>Description</th>
+              <th style="width: 100px;">Quantity<br/>(Units)</th>
+              <th style="width: 120px;">Unit Price</th>
+              <th style="width: 120px;">Delivery Price</th>
+              <th style="width: 120px;">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${invoice.items?.map((item, idx) => `
+              <tr>
+                <td style="text-align: center; font-weight: bold;">${idx + 1}</td>
+                <td>
+                  <div class="item-name">${item.item}</div>
+                  <div class="item-description">${item.description || ''}</div>
+                </td>
+                <td style="text-align: center;">${item.quantity}</td>
+                <td style="text-align: right;">${currencySymbol}${item.price?.toLocaleString()}</td>
+                <td style="text-align: right;">${currencySymbol}${(item.delivery_price || 0).toLocaleString()}</td>
+                <td style="text-align: right; font-weight: bold;">${currencySymbol}${item.total?.toLocaleString()}</td>
+              </tr>
+            `).join('')}
+            <tr class="total-row">
+              <td colspan="5" style="text-align: right; font-weight: bold;">TOTAL AMOUNT</td>
+              <td style="text-align: right;" class="total-amount">${currencySymbol}${invoice.total_amount?.toLocaleString()}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        ${invoice.notes ? `
+          <div class="notes">
+            <h3>Notes</h3>
+            ${invoice.notes.split('\n').map((line, idx) => `<p>${idx + 1}. ${line}</p>`).join('')}
+          </div>
+        ` : ''}
+
+        <div class="footer">
+          <h3>Bank Information</h3>
+          <div class="footer-grid">
+            <div>
+              <div class="footer-label">BENEFICIARY</div>
+              <div class="footer-value">${company?.company_name || 'Dr Howo, Emens Group Limited'}</div>
+            </div>
+            <div>
+              <div class="footer-label">ACCOUNT NUMBER</div>
+              <div class="footer-value">${company?.bank_account_number || '0150943104200'}</div>
+            </div>
+            <div>
+              <div class="footer-label">BRANCH NAME</div>
+              <div class="footer-value">${company?.bank_branch || 'TABATA'}</div>
+            </div>
+            <div>
+              <div class="footer-label">BANKERS & ADDRESS</div>
+              <div class="footer-value">${company?.bank_name || 'CRDB'}, ${company?.bank_address || 'DAR ES SALAAM'}</div>
+            </div>
+          </div>
+          <div class="footer-note">
+            Thank you for your business! For inquiries, please contact us.
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    // Create blob and download
+    const blob = new Blob(['\ufeff', htmlContent], {
+      type: 'application/msword'
+    });
+    
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `DrHowo_${invoice.invoice_number}_${format(new Date(), 'yyyy-MM-dd')}.doc`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const handleShare = async () => {
@@ -111,6 +388,10 @@ export default function ViewInvoice() {
             <Button variant="outline" size="sm" onClick={handleShare}>
               <Share2 className="w-4 h-4 mr-2" />
               Share
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleExportToWord}>
+              <FileText className="w-4 h-4 mr-2" />
+              Export to Word
             </Button>
             <Button variant="outline" size="sm" onClick={handlePrint}>
               <Printer className="w-4 h-4 mr-2" />
