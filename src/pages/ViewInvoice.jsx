@@ -1,4 +1,3 @@
-
 import React, { useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
@@ -115,17 +114,17 @@ export default function ViewInvoice() {
             </Button>
             <Button variant="outline" size="sm" onClick={handlePrint}>
               <Printer className="w-4 h-4 mr-2" />
-              Print
+              Print / Save PDF
             </Button>
           </div>
         </div>
       </div>
 
       {/* Invoice Content */}
-      <div className="max-w-5xl mx-auto p-4 md:p-8" ref={printRef}>
-        <Card className="bg-white shadow-lg print:shadow-none">
+      <div className="max-w-5xl mx-auto p-4 md:p-8 print:p-0" ref={printRef}>
+        <Card className="bg-white shadow-lg print:shadow-none print:border-0">
           {/* Header with Logo and Company Info */}
-          <div className="p-6 pb-4">
+          <div className="p-6 pb-4 print:pt-8">
             <div className="flex justify-between items-start mb-4">
               {/* Logo */}
               <div className="flex-shrink-0">
@@ -165,7 +164,7 @@ export default function ViewInvoice() {
                 {invoice.qr_code_data && (
                   <div>
                     <img src={invoice.qr_code_data} alt="QR Code" className="w-20 h-20 mb-1" />
-                    <p className="text-xs text-slate-500">Scan to view online</p>
+                    <p className="text-xs text-slate-500">Scan to follow us</p>
                   </div>
                 )}
               </div>
@@ -210,7 +209,7 @@ export default function ViewInvoice() {
             <div className="border-2 border-slate-300 rounded-lg overflow-hidden">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-slate-50">
+                  <TableRow className="bg-slate-50 print:bg-slate-50">
                     <TableHead className="font-bold w-16 border-r-2 border-slate-300">Item</TableHead>
                     <TableHead className="font-bold border-r-2 border-slate-300">Description</TableHead>
                     <TableHead className="font-bold text-center w-28 border-r-2 border-slate-300">Quantity<br/>(Units)</TableHead>
@@ -249,7 +248,7 @@ export default function ViewInvoice() {
                       <TableCell className="text-right font-semibold align-top pt-4">{currencySymbol}{item.total?.toLocaleString()}</TableCell>
                     </TableRow>
                   ))}
-                  <TableRow className="bg-blue-50 font-bold border-t-2 border-slate-300">
+                  <TableRow className="bg-blue-50 print:bg-blue-50 font-bold border-t-2 border-slate-300">
                     <TableCell colSpan={5} className="text-right">TOTAL AMOUNT</TableCell>
                     <TableCell className="text-right text-lg text-blue-600">
                       {currencySymbol}{invoice.total_amount?.toLocaleString()}
@@ -261,7 +260,7 @@ export default function ViewInvoice() {
 
             {/* Notes */}
             {invoice.notes && (
-              <div className="bg-slate-50 p-3 rounded">
+              <div className="bg-slate-50 print:bg-slate-50 p-3 rounded">
                 <h3 className="font-semibold text-slate-700 mb-1 text-sm">Notes</h3>
                 <div className="text-xs text-slate-600 whitespace-pre-wrap space-y-0.5">
                   {invoice.notes.split('\n').map((line, idx) => (
@@ -273,7 +272,7 @@ export default function ViewInvoice() {
           </div>
 
           {/* Bank Information Footer */}
-          <div className="bg-slate-800 text-white p-4">
+          <div className="bg-slate-800 print:bg-slate-800 text-white p-4 print:break-inside-avoid">
             <h3 className="font-bold text-sm mb-2 uppercase">Bank Information</h3>
             <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-xs">
               <div>
@@ -304,23 +303,32 @@ export default function ViewInvoice() {
 
       <style jsx>{`
         @media print {
+          /* Reset and base styles */
+          * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+          }
+          
           body { 
             margin: 0; 
             padding: 0;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-            color-adjust: exact;
           }
           
-          .print\\:hidden { display: none !important; }
-          .print\\:shadow-none { box-shadow: none !important; }
-          
-          /* Hide all navigation and chrome elements */
-          aside, nav, header, [role="navigation"], [role="banner"] { 
+          /* Hide navigation and UI elements */
+          .print\\:hidden,
+          aside, 
+          nav, 
+          header:not(.invoice-header), 
+          [role="navigation"], 
+          [role="banner"],
+          [data-sidebar],
+          .sidebar,
+          button.print\\:hidden {
             display: none !important; 
           }
           
-          /* Ensure content takes full width */
+          /* Full width for content */
           main, .main-content {
             margin: 0 !important;
             padding: 0 !important;
@@ -328,66 +336,83 @@ export default function ViewInvoice() {
             max-width: 100% !important;
           }
           
-          /* Preserve all colors in print */
-          * {
+          /* Page setup */
+          @page {
+            margin: 1.2cm;
+            size: A4 portrait;
+          }
+          
+          /* Preserve backgrounds and colors */
+          .bg-slate-800,
+          .bg-slate-50,
+          .bg-blue-50,
+          .bg-black,
+          .text-white,
+          .text-blue-600,
+          .text-slate-700 {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
-            color-adjust: exact !important;
           }
           
-          /* Ensure page breaks don't split items */
-          .border.rounded-lg,
-          .border-2.rounded-lg {
-            page-break-inside: avoid;
-          }
-          
-          /* Keep table formatting and borders */
-          table {
-            width: 100%;
-            border-collapse: collapse;
-          }
-          
-          table td,
-          table th {
+          /* Ensure borders print correctly */
+          .border,
+          .border-2,
+          .border-slate-300,
+          .border-r-2,
+          .border-t-2 {
             border-color: rgb(203, 213, 225) !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
           }
           
-          /* Ensure all backgrounds and borders print */
-          .bg-slate-800,
-          .bg-slate-50,
-          .bg-blue-50,
-          .bg-black,
-          .border-slate-300,
-          .border-r-2,
-          .border-t-2,
-          .border-2 {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-            color-adjust: exact !important;
-          }
-          
-          /* Ensure black line separator prints */
+          /* Black separator line */
           [style*="height: 1mm"] {
             background-color: black !important;
+            height: 1mm !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
           }
           
-          /* Ensure text colors print */
-          .text-blue-600,
-          .text-slate-700,
-          .text-slate-600,
-          .text-white {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
+          /* Table styles */
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            page-break-inside: auto;
           }
-        }
-        
-        @page {
-          margin: 0.5cm;
-          size: A4;
+          
+          tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
+          }
+          
+          thead {
+            display: table-header-group;
+          }
+          
+          /* Footer stays at bottom */
+          .print\\:break-inside-avoid {
+            page-break-inside: avoid !important;
+          }
+          
+          /* Card shadow removal */
+          .print\\:shadow-none,
+          .shadow-lg,
+          .shadow-md {
+            box-shadow: none !important;
+          }
+          
+          .print\\:border-0 {
+            border: 0 !important;
+          }
+          
+          /* Spacing adjustments */
+          .print\\:p-0 {
+            padding: 0 !important;
+          }
+          
+          .print\\:pt-8 {
+            padding-top: 2rem !important;
+          }
         }
       `}</style>
     </div>
