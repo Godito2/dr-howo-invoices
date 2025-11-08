@@ -1,4 +1,3 @@
-
 import React, { useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
@@ -53,23 +52,23 @@ export default function ViewInvoice() {
         <title>Invoice ${invoice.invoice_number}</title>
         <style>
           body {
-            font-family: Arial, sans-serif;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            color: #000;
+            color: #222222;
           }
           .header {
             display: flex;
             justify-content: space-between;
             align-items: start;
             margin-bottom: 20px;
-            border-bottom: 3px solid #000;
+            border-bottom: 3px solid #002b5c;
             padding-bottom: 20px;
           }
           .logo {
             width: 100px;
             height: 100px;
-            border: 2px solid #000;
+            border: 2px solid #002b5c;
           }
           .company-info {
             text-align: center;
@@ -81,16 +80,19 @@ export default function ViewInvoice() {
             font-weight: bold;
             text-transform: uppercase;
             margin: 0;
+            color: #002b5c;
           }
           .company-subtitle {
             font-size: 18px;
             font-weight: bold;
             text-transform: uppercase;
             margin: 5px 0;
+            color: #222222;
           }
           .company-details {
             font-size: 11px;
             margin-top: 10px;
+            color: #222222;
           }
           .qr-code {
             width: 80px;
@@ -99,21 +101,22 @@ export default function ViewInvoice() {
           .invoice-title {
             font-size: 24px;
             font-weight: bold;
-            color: #2563eb;
+            color: #002b5c;
             margin: 20px 0;
           }
           .invoice-details {
             display: flex;
             justify-content: space-between;
             margin: 20px 0;
-            position: relative; /* Added for watermark */
+            position: relative;
           }
           .invoice-details > div {
-            position: relative; /* Ensure children stack above watermark */
+            position: relative;
             z-index: 10;
           }
           .detail-section {
             font-size: 13px;
+            color: #222222;
           }
           .detail-section p {
             margin: 5px 0;
@@ -125,56 +128,60 @@ export default function ViewInvoice() {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
-            border: 2px solid #cbd5e1;
-            position: relative; /* Ensure table stacks above watermark */
+            border: 2px solid #002b5c;
+            position: relative;
             z-index: 10;
           }
           th, td {
-            border: 2px solid #cbd5e1;
+            border: 2px solid #002b5c;
             padding: 10px;
             text-align: left;
           }
           th {
-            background-color: #f8fafc;
+            background-color: #f8f8f8;
             font-weight: bold;
             text-align: center;
+            color: #222222;
           }
           .item-description {
             font-size: 11px;
-            color: #475569;
+            color: #222222;
             white-space: pre-wrap;
           }
           .item-name {
             font-weight: bold;
             font-size: 13px;
+            color: #222222;
           }
           .total-row {
-            background-color: #eff6ff;
+            background-color: #f8f8f8;
             font-weight: bold;
           }
           .total-amount {
             font-size: 18px;
-            color: #2563eb;
+            color: #002b5c;
           }
           .notes {
-            background-color: #f8fafc;
+            background-color: #f8f8f8;
             padding: 15px;
             margin: 20px 0;
             border-radius: 5px;
-            position: relative; /* Ensure notes stacks above watermark */
+            position: relative;
             z-index: 10;
           }
           .notes h3 {
             font-size: 13px;
             font-weight: bold;
             margin: 0 0 10px 0;
+            color: #222222;
           }
           .notes p {
             font-size: 11px;
             margin: 3px 0;
+            color: #222222;
           }
           .footer {
-            background-color: #1e293b;
+            background-color: #002b5c;
             color: #ffffff;
             padding: 20px;
             margin-top: 30px;
@@ -192,7 +199,7 @@ export default function ViewInvoice() {
             font-size: 11px;
           }
           .footer-label {
-            color: #94a3b8;
+            color: #f8f8f8;
             font-size: 10px;
             margin-bottom: 3px;
           }
@@ -202,12 +209,12 @@ export default function ViewInvoice() {
           .footer-note {
             text-align: center;
             font-size: 10px;
-            color: #94a3b8;
+            color: #f8f8f8;
             margin-top: 15px;
             padding-top: 15px;
-            border-top: 1px solid #334155;
+            border-top: 1px solid rgba(255,255,255,0.2);
           }
-          .watermark-section { /* Added for watermark in Word export */
+          .watermark-section {
             position: absolute;
             top: 0;
             left: 0;
@@ -216,13 +223,14 @@ export default function ViewInvoice() {
             display: flex;
             align-items: center;
             justify-content: center;
-            opacity: 0.10;
+            opacity: 0.06;
             pointer-events: none;
             z-index: 0;
+            transform: rotate(-30deg);
           }
           .watermark-section img {
-            width: 320px; /* Equivalent to w-80 in Tailwind */
-            height: 320px; /* Equivalent to h-80 in Tailwind */
+            width: 320px;
+            height: 320px;
             object-fit: contain;
           }
         </style>
@@ -230,7 +238,7 @@ export default function ViewInvoice() {
       <body>
         <div class="header">
           <div>
-            ${company?.logo_url ? `<img src="${company.logo_url}" alt="Logo" class="logo">` : '<div style="width: 100px; height: 100px; border: 2px solid #000; text-align: center; line-height: 100px; font-weight: bold;">LOGO</div>'}
+            ${company?.logo_url ? `<img src="${company.logo_url}" alt="Logo" class="logo">` : '<div style="width: 100px; height: 100px; border: 2px solid #002b5c; text-align: center; line-height: 100px; font-weight: bold;">LOGO</div>'}
           </div>
           <div class="company-info">
             <h1 class="company-name">${company?.company_name?.split(',')[0] || 'DR HOWO'}</h1>
@@ -436,13 +444,14 @@ export default function ViewInvoice() {
 
       {/* Invoice Content */}
       <div className="max-w-5xl mx-auto p-4 md:p-8 print:p-0" ref={printRef}>
-        <Card className="bg-white shadow-lg print:shadow-none print:border-0 relative overflow-hidden">
-          {/* Watermark - centered and subtle */}
+        <Card className="bg-white shadow-lg print:shadow-none print:border-0 relative overflow-hidden" style={{fontFamily: "'Helvetica Neue', 'Roboto', sans-serif"}}>
+          {/* Watermark - centered, rotated -30deg, 6% opacity */}
           {company?.watermark_url && (
             <div 
               className="absolute inset-0 flex items-center justify-center pointer-events-none z-0"
               style={{
-                opacity: 0.10,
+                opacity: 0.06,
+                transform: 'rotate(-30deg)',
                 WebkitPrintColorAdjust: 'exact',
                 printColorAdjust: 'exact'
               }}
@@ -453,8 +462,7 @@ export default function ViewInvoice() {
                 className="max-w-md max-h-md object-contain"
                 style={{
                   WebkitPrintColorAdjust: 'exact',
-                  printColorAdjust: 'exact',
-                  opacity: 0.10
+                  printColorAdjust: 'exact'
                 }}
               />
             </div>
@@ -471,25 +479,25 @@ export default function ViewInvoice() {
                     <img
                       src={company.logo_url}
                       alt="Company Logo"
-                      className="w-24 h-24 object-contain border-2 border-slate-800 p-1 bg-white"
-                      style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}
+                      className="w-24 h-24 object-contain border-2 p-1 bg-white"
+                      style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', borderColor: '#002b5c'}}
                     />
                   ) : (
-                    <div className="w-24 h-24 border-2 border-slate-800 flex items-center justify-center bg-white">
-                      <span className="text-lg font-bold">LOGO</span>
+                    <div className="w-24 h-24 border-2 flex items-center justify-center bg-white" style={{borderColor: '#002b5c'}}>
+                      <span className="text-lg font-bold" style={{color: '#002b5c'}}>LOGO</span>
                     </div>
                   )}
                 </div>
 
                 {/* Company Name */}
                 <div className="flex-1 text-center px-4">
-                  <h1 className="text-4xl font-black text-slate-900 tracking-tight uppercase mb-1">
+                  <h1 className="text-4xl font-black tracking-tight uppercase mb-1" style={{color: '#002b5c'}}>
                     {company?.company_name?.split(',')[0] || 'DR HOWO'}
                   </h1>
-                  <h2 className="text-xl font-bold text-slate-800 tracking-wide uppercase mb-3">
+                  <h2 className="text-xl font-bold tracking-wide uppercase mb-3" style={{color: '#222222'}}>
                     {company?.company_name?.split(',')[1]?.trim() || 'EMENS GROUP LIMITED'}
                   </h2>
-                  <div className="text-xs font-medium text-slate-700">
+                  <div className="text-xs font-medium" style={{color: '#222222'}}>
                     {company?.phone_numbers && (
                       <span>Simu: {company.phone_numbers}</span>
                     )}
@@ -509,7 +517,7 @@ export default function ViewInvoice() {
                         className="w-20 h-20 mb-1"
                         style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}
                       />
-                      <p className="text-xs text-slate-500">Scan to follow us</p>
+                      <p className="text-xs" style={{color: '#222222'}}>Scan to follow us</p>
                     </div>
                   )}
                 </div>
@@ -517,26 +525,27 @@ export default function ViewInvoice() {
               
               {/* Physical Address */}
               {company?.physical_address && (
-                <div className="text-xs text-slate-600 text-center">
+                <div className="text-xs text-center" style={{color: '#222222'}}>
                   <p>{company.physical_address}</p>
                 </div>
               )}
             </div>
 
-            {/* Black Line Separator - 1mm */}
+            {/* Blue Line Separator - 1mm */}
             <div 
-              className="bg-black" 
-              style={{height: '1mm', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#000000'}}
+              className="bg-primary" 
+              style={{height: '1mm', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#002b5c'}}
             ></div>
 
             {/* Invoice Details */}
             <div className="p-6 space-y-4 relative">
-              {/* Watermark in Invoice Details Section */}
+              {/* Watermark in Invoice Details Section - rotated -30deg, 6% opacity */}
               {company?.watermark_url && (
                 <div 
                   className="absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center pointer-events-none"
                   style={{
-                    opacity: 0.10,
+                    opacity: 0.06,
+                    transform: 'rotate(-30deg)',
                     WebkitPrintColorAdjust: 'exact',
                     printColorAdjust: 'exact'
                   }}
@@ -547,8 +556,7 @@ export default function ViewInvoice() {
                     className="w-80 h-80 object-contain"
                     style={{
                       WebkitPrintColorAdjust: 'exact',
-                      printColorAdjust: 'exact',
-                      opacity: 0.10
+                      printColorAdjust: 'exact'
                     }}
                   />
                 </div>
@@ -556,8 +564,8 @@ export default function ViewInvoice() {
 
               <div className="flex justify-between items-start relative z-10">
                 <div>
-                  <h2 className="text-2xl font-bold text-blue-600 mb-3">PROFORMA INVOICE</h2>
-                  <div className="space-y-1 text-sm">
+                  <h2 className="text-2xl font-bold mb-3" style={{color: '#002b5c'}}>PROFORMA INVOICE</h2>
+                  <div className="space-y-1 text-sm" style={{color: '#222222'}}>
                     <p><span className="font-semibold">Invoice Number:</span> {invoice.invoice_number}</p>
                     <p><span className="font-semibold">Date:</span> {invoice.invoice_date && format(new Date(invoice.invoice_date), "MMMM d, yyyy")}</p>
                     {invoice.delivery_date && (
@@ -566,8 +574,8 @@ export default function ViewInvoice() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <h3 className="font-semibold text-slate-700 mb-2">Bill To:</h3>
-                  <div className="space-y-1 text-sm">
+                  <h3 className="font-semibold mb-2" style={{color: '#222222'}}>Bill To:</h3>
+                  <div className="space-y-1 text-sm" style={{color: '#222222'}}>
                     <p className="font-semibold">{invoice.customer_name}</p>
                     {invoice.customer_phone && <p>{invoice.customer_phone}</p>}
                     {invoice.customer_email && <p>{invoice.customer_email}</p>}
@@ -577,28 +585,27 @@ export default function ViewInvoice() {
               </div>
 
               {/* Items Table */}
-              <div className="border-2 border-slate-300 rounded-lg overflow-hidden relative z-10">
+              <div className="border-2 rounded-lg overflow-hidden relative z-10" style={{borderColor: '#002b5c'}}>
                 <Table>
                   <TableHeader>
                     <TableRow 
-                      className="bg-slate-50"
-                      style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#f8fafc'}}
+                      style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#f8f8f8'}}
                     >
-                      <TableHead className="font-bold w-16 border-r-2 border-slate-300">Item</TableHead>
-                      <TableHead className="font-bold border-r-2 border-slate-300">Description</TableHead>
-                      <TableHead className="font-bold text-center w-28 border-r-2 border-slate-300">Quantity<br/>(Units)</TableHead>
-                      <TableHead className="font-bold text-right w-32 border-r-2 border-slate-300">Unit<br/>Price</TableHead>
-                      <TableHead className="font-bold text-right w-32 border-r-2 border-slate-300">Delivery<br/>Price</TableHead>
-                      <TableHead className="font-bold text-right w-32">Total</TableHead>
+                      <TableHead className="font-bold w-16 border-r-2" style={{borderColor: '#002b5c', color: '#222222'}}>Item</TableHead>
+                      <TableHead className="font-bold border-r-2" style={{borderColor: '#002b5c', color: '#222222'}}>Description</TableHead>
+                      <TableHead className="font-bold text-center w-28 border-r-2" style={{borderColor: '#002b5c', color: '#222222'}}>Quantity<br/>(Units)</TableHead>
+                      <TableHead className="font-bold text-right w-32 border-r-2" style={{borderColor: '#002b5c', color: '#222222'}}>Unit<br/>Price</TableHead>
+                      <TableHead className="font-bold text-right w-32 border-r-2" style={{borderColor: '#002b5c', color: '#222222'}}>Delivery<br/>Price</TableHead>
+                      <TableHead className="font-bold text-right w-32" style={{color: '#222222'}}>Total</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {invoice.items?.map((item, idx) => (
-                      <TableRow key={idx} className="border-t border-slate-300">
-                        <TableCell className="font-bold text-center align-top pt-4 border-r-2 border-slate-300">
+                      <TableRow key={idx} style={{borderColor: '#002b5c'}}>
+                        <TableCell className="font-bold text-center align-top pt-4 border-r-2" style={{borderColor: '#002b5c', color: '#222222'}}>
                           {idx + 1}
                         </TableCell>
-                        <TableCell className="align-top py-3 border-r-2 border-slate-300">
+                        <TableCell className="align-top py-3 border-r-2" style={{borderColor: '#002b5c'}}>
                           {item.images && item.images.length > 0 && (
                             <div className="mb-2 flex gap-2">
                               {item.images.map((img, imgIdx) => (
@@ -606,29 +613,29 @@ export default function ViewInvoice() {
                                   key={imgIdx}
                                   src={img}
                                   alt={`${item.item} - ${imgIdx + 1}`}
-                                  className="w-24 h-24 object-cover rounded border border-slate-300"
-                                  style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}
+                                  className="w-24 h-24 object-cover rounded border"
+                                  style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', borderColor: '#002b5c'}}
                                 />
                               ))}
                             </div>
                           )}
-                          <div className="font-bold text-sm mb-1">{item.item}</div>
-                          <div className="text-xs whitespace-pre-wrap text-slate-700 leading-relaxed">
+                          <div className="font-bold text-sm mb-1" style={{color: '#222222'}}>{item.item}</div>
+                          <div className="text-xs whitespace-pre-wrap leading-relaxed" style={{color: '#222222'}}>
                             {item.description}
                           </div>
                         </TableCell>
-                        <TableCell className="text-center align-top pt-4 border-r-2 border-slate-300">{item.quantity}</TableCell>
-                        <TableCell className="text-right align-top pt-4 border-r-2 border-slate-300">{currencySymbol}{item.price?.toLocaleString()}</TableCell>
-                        <TableCell className="text-right align-top pt-4 border-r-2 border-slate-300">{currencySymbol}{(item.delivery_price || 0).toLocaleString()}</TableCell>
-                        <TableCell className="text-right font-semibold align-top pt-4">{currencySymbol}{item.total?.toLocaleString()}</TableCell>
+                        <TableCell className="text-center align-top pt-4 border-r-2" style={{borderColor: '#002b5c', color: '#222222'}}>{item.quantity}</TableCell>
+                        <TableCell className="text-right align-top pt-4 border-r-2" style={{borderColor: '#002b5c', color: '#222222'}}>{currencySymbol}{item.price?.toLocaleString()}</TableCell>
+                        <TableCell className="text-right align-top pt-4 border-r-2" style={{borderColor: '#002b5c', color: '#222222'}}>{currencySymbol}{(item.delivery_price || 0).toLocaleString()}</TableCell>
+                        <TableCell className="text-right font-semibold align-top pt-4" style={{color: '#222222'}}>{currencySymbol}{item.total?.toLocaleString()}</TableCell>
                       </TableRow>
                     ))}
                     <TableRow 
-                      className="bg-blue-50 font-bold border-t-2 border-slate-300"
-                      style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#eff6ff'}}
+                      className="font-bold border-t-2"
+                      style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#f8f8f8', borderColor: '#002b5c'}}
                     >
-                      <TableCell colSpan={5} className="text-right">TOTAL AMOUNT</TableCell>
-                      <TableCell className="text-right text-lg text-blue-600">
+                      <TableCell colSpan={5} className="text-right" style={{color: '#222222'}}>TOTAL AMOUNT</TableCell>
+                      <TableCell className="text-right text-lg" style={{color: '#002b5c'}}>
                         {currencySymbol}{invoice.total_amount?.toLocaleString()}
                       </TableCell>
                     </TableRow>
@@ -639,11 +646,11 @@ export default function ViewInvoice() {
               {/* Notes */}
               {invoice.notes && (
                 <div 
-                  className="bg-slate-50 p-3 rounded relative z-10"
-                  style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#f8fafc'}}
+                  className="p-3 rounded relative z-10"
+                  style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#f8f8f8'}}
                 >
-                  <h3 className="font-semibold text-slate-700 mb-1 text-sm">Notes</h3>
-                  <div className="text-xs text-slate-600 whitespace-pre-wrap space-y-0.5">
+                  <h3 className="font-semibold mb-1 text-sm" style={{color: '#222222'}}>Notes</h3>
+                  <div className="text-xs whitespace-pre-wrap space-y-0.5" style={{color: '#222222'}}>
                     {invoice.notes.split('\n').map((line, idx) => (
                       <p key={idx}>{idx + 1}. {line}</p>
                     ))}
@@ -654,31 +661,31 @@ export default function ViewInvoice() {
 
             {/* Bank Information Footer */}
             <div 
-              className="bg-slate-800 text-white p-4"
-              style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#1e293b', color: '#ffffff'}}
+              className="text-white p-4"
+              style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#002b5c', color: '#ffffff'}}
             >
               <h3 className="font-bold text-sm mb-2 uppercase">Bank Information</h3>
               <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-xs">
                 <div>
-                  <p className="text-slate-400 text-xs" style={{color: '#94a3b8'}}>BENEFICIARY</p>
+                  <p className="text-xs" style={{color: '#f8f8f8'}}>BENEFICIARY</p>
                   <p className="font-semibold">{company?.company_name || 'Dr Howo, Emens Group Limited'}</p>
                 </div>
                 <div>
-                  <p className="text-slate-400 text-xs" style={{color: '#94a3b8'}}>ACCOUNT NUMBER</p>
+                  <p className="text-xs" style={{color: '#f8f8f8'}}>ACCOUNT NUMBER</p>
                   <p className="font-semibold">{company?.bank_account_number || '0150943104200'}</p>
                 </div>
                 <div>
-                  <p className="text-slate-400 text-xs" style={{color: '#94a3b8'}}>BRANCH NAME</p>
+                  <p className="text-xs" style={{color: '#f8f8f8'}}>BRANCH NAME</p>
                   <p className="font-semibold">{company?.bank_branch || 'TABATA'}</p>
                 </div>
                 <div>
-                  <p className="text-slate-400 text-xs" style={{color: '#94a3b8'}}>BANKERS & ADDRESS</p>
+                  <p className="text-xs" style={{color: '#f8f8f8'}}>BANKERS & ADDRESS</p>
                   <p className="font-semibold">
                     {company?.bank_name || 'CRDB'}, {company?.bank_address || 'DAR ES SALAAM'}
                   </p>
                 </div>
               </div>
-              <div className="mt-3 pt-2 border-t border-slate-700 text-center text-xs text-slate-400" style={{borderTopColor: '#334155', color: '#94a3b8'}}>
+              <div className="mt-3 pt-2 text-center text-xs" style={{borderTopColor: 'rgba(255,255,255,0.2)', borderTopWidth: '1px', borderTopStyle: 'solid', color: '#f8f8f8'}}>
                 <p>Thank you for your business! For inquiries, please contact us.</p>
               </div>
             </div>
@@ -693,6 +700,11 @@ export default function ViewInvoice() {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
             color-adjust: exact !important;
+          }
+          
+          /* Set professional font */
+          body, * {
+            font-family: 'Helvetica Neue', 'Roboto', Arial, sans-serif !important;
           }
           
           /* Reset body */
@@ -722,7 +734,7 @@ export default function ViewInvoice() {
             max-width: 100% !important;
           }
           
-          /* Page setup */
+          /* Page setup - 1.2cm margins */
           @page {
             margin: 1.2cm;
             size: A4 portrait;
@@ -747,73 +759,46 @@ export default function ViewInvoice() {
             padding-top: 2rem !important;
           }
           
-          /* Force specific colors to print */
-          .bg-slate-800 {
-            background-color: #1e293b !important;
+          /* Force specific colors to print - New Professional Theme */
+          [style*="background-color: #002b5c"],
+          [style*="backgroundColor: #002b5c"] {
+            background-color: #002b5c !important;
           }
           
-          .bg-slate-50 {
-            background-color: #f8fafc !important;
+          [style*="background-color: #f8f8f8"],
+          [style*="backgroundColor: #f8f8f8"] {
+            background-color: #f8f8f8 !important;
           }
           
-          .bg-blue-50 {
-            background-color: #eff6ff !important;
+          [style*="color: #002b5c"] {
+            color: #002b5c !important;
           }
           
-          .bg-black {
-            background-color: #000000 !important;
+          [style*="color: #222222"] {
+            color: #222222 !important;
           }
           
-          .text-white {
+          [style*="color: #ffffff"],
+          [style*="color: #fff"] {
             color: #ffffff !important;
           }
           
-          .text-blue-600 {
-            color: #2563eb !important;
+          [style*="color: #f8f8f8"] {
+            color: #f8f8f8 !important;
           }
           
-          .text-slate-700 {
-            color: #334155 !important;
+          /* Force borders to print with new theme color */
+          [style*="border-color: #002b5c"],
+          [style*="borderColor: #002b5c"] {
+            border-color: #002b5c !important;
           }
           
-          .text-slate-600 {
-            color: #475569 !important;
-          }
-          
-          .text-slate-400 {
-            color: #94a3b8 !important;
-          }
-          
-          .text-slate-900 {
-            color: #0f172a !important;
-          }
-          
-          .text-slate-800 {
-            color: #1e293b !important;
-          }
-          
-          /* Force borders to print */
           .border,
           .border-2,
-          .border-slate-300,
-          .border-slate-800,
           .border-r-2,
           .border-t,
           .border-t-2 {
             border-style: solid !important;
-          }
-          
-          .border-slate-300,
-          .border-r-2.border-slate-300 {
-            border-color: #cbd5e1 !important;
-          }
-          
-          .border-slate-800 {
-            border-color: #1e293b !important;
-          }
-          
-          .border-slate-700 {
-            border-color: #334155 !important;
           }
           
           /* Table styles */
@@ -836,16 +821,24 @@ export default function ViewInvoice() {
             background-color: transparent;
           }
           
-          /* Ensure images print */
+          /* Ensure images print with high quality */
           img {
             max-width: 100%;
             page-break-inside: avoid;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+          }
+          
+          /* Ensure watermark prints correctly with rotation */
+          [style*="transform: rotate(-30deg)"] {
+            transform: rotate(-30deg) !important;
+            -webkit-transform: rotate(-30deg) !important;
           }
           
           /* Prevent page breaks in key sections */
-          .bg-slate-800 {
+          [style*="background-color: #002b5c"] {
             page-break-inside: avoid !important;
           }
         }
