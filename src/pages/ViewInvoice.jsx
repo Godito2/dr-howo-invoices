@@ -1,5 +1,5 @@
 
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -36,6 +36,16 @@ export default function ViewInvoice() {
   const invoice = invoices.find(inv => inv.id === invoiceId || inv.invoice_number === invoiceId);
   const company = companyProfiles[0];
   const currencySymbol = invoice?.currency === "TZS" ? "TZS " : "$";
+
+  // Set document title for PDF filename
+  useEffect(() => {
+    if (invoice) {
+      document.title = `Dr Howo Invoices ${invoice.invoice_number}`;
+    }
+    return () => {
+      document.title = 'Dr Howo';
+    };
+  }, [invoice]);
 
   const handlePrint = () => {
     window.print();
