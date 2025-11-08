@@ -133,6 +133,7 @@ export default function ViewInvoice() {
                     src={company.logo_url}
                     alt="Company Logo"
                     className="w-24 h-24 object-contain border-2 border-slate-800 p-1 bg-white"
+                    style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}
                   />
                 ) : (
                   <div className="w-24 h-24 border-2 border-slate-800 flex items-center justify-center bg-white">
@@ -163,7 +164,12 @@ export default function ViewInvoice() {
               <div className="flex-shrink-0 text-center">
                 {invoice.qr_code_data && (
                   <div>
-                    <img src={invoice.qr_code_data} alt="QR Code" className="w-20 h-20 mb-1" />
+                    <img 
+                      src={invoice.qr_code_data} 
+                      alt="QR Code" 
+                      className="w-20 h-20 mb-1"
+                      style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}
+                    />
                     <p className="text-xs text-slate-500">Scan to follow us</p>
                   </div>
                 )}
@@ -179,7 +185,10 @@ export default function ViewInvoice() {
           </div>
 
           {/* Black Line Separator - 1mm */}
-          <div className="h-1 bg-black" style={{height: '1mm'}}></div>
+          <div 
+            className="bg-black" 
+            style={{height: '1mm', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#000000'}}
+          ></div>
 
           {/* Invoice Details */}
           <div className="p-6 space-y-4">
@@ -209,7 +218,10 @@ export default function ViewInvoice() {
             <div className="border-2 border-slate-300 rounded-lg overflow-hidden">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-slate-50 print:bg-slate-50">
+                  <TableRow 
+                    className="bg-slate-50"
+                    style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#f8fafc'}}
+                  >
                     <TableHead className="font-bold w-16 border-r-2 border-slate-300">Item</TableHead>
                     <TableHead className="font-bold border-r-2 border-slate-300">Description</TableHead>
                     <TableHead className="font-bold text-center w-28 border-r-2 border-slate-300">Quantity<br/>(Units)</TableHead>
@@ -233,6 +245,7 @@ export default function ViewInvoice() {
                                 src={img}
                                 alt={`${item.item} - ${imgIdx + 1}`}
                                 className="w-24 h-24 object-cover rounded border border-slate-300"
+                                style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}
                               />
                             ))}
                           </div>
@@ -248,7 +261,10 @@ export default function ViewInvoice() {
                       <TableCell className="text-right font-semibold align-top pt-4">{currencySymbol}{item.total?.toLocaleString()}</TableCell>
                     </TableRow>
                   ))}
-                  <TableRow className="bg-blue-50 print:bg-blue-50 font-bold border-t-2 border-slate-300">
+                  <TableRow 
+                    className="bg-blue-50 font-bold border-t-2 border-slate-300"
+                    style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#eff6ff'}}
+                  >
                     <TableCell colSpan={5} className="text-right">TOTAL AMOUNT</TableCell>
                     <TableCell className="text-right text-lg text-blue-600">
                       {currencySymbol}{invoice.total_amount?.toLocaleString()}
@@ -260,7 +276,10 @@ export default function ViewInvoice() {
 
             {/* Notes */}
             {invoice.notes && (
-              <div className="bg-slate-50 print:bg-slate-50 p-3 rounded">
+              <div 
+                className="bg-slate-50 p-3 rounded"
+                style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#f8fafc'}}
+              >
                 <h3 className="font-semibold text-slate-700 mb-1 text-sm">Notes</h3>
                 <div className="text-xs text-slate-600 whitespace-pre-wrap space-y-0.5">
                   {invoice.notes.split('\n').map((line, idx) => (
@@ -272,50 +291,55 @@ export default function ViewInvoice() {
           </div>
 
           {/* Bank Information Footer */}
-          <div className="bg-slate-800 print:bg-slate-800 text-white p-4 print:break-inside-avoid">
+          <div 
+            className="bg-slate-800 text-white p-4"
+            style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#1e293b', color: '#ffffff'}}
+          >
             <h3 className="font-bold text-sm mb-2 uppercase">Bank Information</h3>
             <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-xs">
               <div>
-                <p className="text-slate-400 text-xs">BENEFICIARY</p>
+                <p className="text-slate-400 text-xs" style={{color: '#94a3b8'}}>BENEFICIARY</p>
                 <p className="font-semibold">{company?.company_name || 'Dr Howo, Emens Group Limited'}</p>
               </div>
               <div>
-                <p className="text-slate-400 text-xs">ACCOUNT NUMBER</p>
+                <p className="text-slate-400 text-xs" style={{color: '#94a3b8'}}>ACCOUNT NUMBER</p>
                 <p className="font-semibold">{company?.bank_account_number || '0150943104200'}</p>
               </div>
               <div>
-                <p className="text-slate-400 text-xs">BRANCH NAME</p>
+                <p className="text-slate-400 text-xs" style={{color: '#94a3b8'}}>BRANCH NAME</p>
                 <p className="font-semibold">{company?.bank_branch || 'TABATA'}</p>
               </div>
               <div>
-                <p className="text-slate-400 text-xs">BANKERS & ADDRESS</p>
+                <p className="text-slate-400 text-xs" style={{color: '#94a3b8'}}>BANKERS & ADDRESS</p>
                 <p className="font-semibold">
                   {company?.bank_name || 'CRDB'}, {company?.bank_address || 'DAR ES SALAAM'}
                 </p>
               </div>
             </div>
-            <div className="mt-3 pt-2 border-t border-slate-700 text-center text-xs text-slate-400">
+            <div className="mt-3 pt-2 border-t border-slate-700 text-center text-xs text-slate-400" style={{borderTopColor: '#334155', color: '#94a3b8'}}>
               <p>Thank you for your business! For inquiries, please contact us.</p>
             </div>
           </div>
         </Card>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @media print {
-          /* Reset and base styles */
-          * {
+          /* Force all elements to preserve colors and backgrounds */
+          *, *::before, *::after {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
             color-adjust: exact !important;
           }
           
+          /* Reset body */
           body { 
-            margin: 0; 
-            padding: 0;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: white !important;
           }
           
-          /* Hide navigation and UI elements */
+          /* Hide all navigation elements */
           .print\\:hidden,
           aside, 
           nav, 
@@ -323,12 +347,11 @@ export default function ViewInvoice() {
           [role="navigation"], 
           [role="banner"],
           [data-sidebar],
-          .sidebar,
-          button.print\\:hidden {
+          .sidebar {
             display: none !important; 
           }
           
-          /* Full width for content */
+          /* Full width for main content */
           main, .main-content {
             margin: 0 !important;
             padding: 0 !important;
@@ -342,35 +365,92 @@ export default function ViewInvoice() {
             size: A4 portrait;
           }
           
-          /* Preserve backgrounds and colors */
-          .bg-slate-800,
-          .bg-slate-50,
-          .bg-blue-50,
-          .bg-black,
-          .text-white,
-          .text-blue-600,
-          .text-slate-700 {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
+          /* Remove shadows and adjust spacing */
+          .print\\:shadow-none,
+          .shadow-lg,
+          .shadow-md {
+            box-shadow: none !important;
           }
           
-          /* Ensure borders print correctly */
+          .print\\:border-0 {
+            border: 0 !important;
+          }
+          
+          .print\\:p-0 {
+            padding: 0 !important;
+          }
+          
+          .print\\:pt-8 {
+            padding-top: 2rem !important;
+          }
+          
+          /* Force specific colors to print */
+          .bg-slate-800 {
+            background-color: #1e293b !important;
+          }
+          
+          .bg-slate-50 {
+            background-color: #f8fafc !important;
+          }
+          
+          .bg-blue-50 {
+            background-color: #eff6ff !important;
+          }
+          
+          .bg-black {
+            background-color: #000000 !important;
+          }
+          
+          .text-white {
+            color: #ffffff !important;
+          }
+          
+          .text-blue-600 {
+            color: #2563eb !important;
+          }
+          
+          .text-slate-700 {
+            color: #334155 !important;
+          }
+          
+          .text-slate-600 {
+            color: #475569 !important;
+          }
+          
+          .text-slate-400 {
+            color: #94a3b8 !important;
+          }
+          
+          .text-slate-900 {
+            color: #0f172a !important;
+          }
+          
+          .text-slate-800 {
+            color: #1e293b !important;
+          }
+          
+          /* Force borders to print */
           .border,
           .border-2,
           .border-slate-300,
+          .border-slate-800,
           .border-r-2,
+          .border-t,
           .border-t-2 {
-            border-color: rgb(203, 213, 225) !important;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
+            border-style: solid !important;
           }
           
-          /* Black separator line */
-          [style*="height: 1mm"] {
-            background-color: black !important;
-            height: 1mm !important;
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
+          .border-slate-300,
+          .border-r-2.border-slate-300 {
+            border-color: #cbd5e1 !important;
+          }
+          
+          .border-slate-800 {
+            border-color: #1e293b !important;
+          }
+          
+          .border-slate-700 {
+            border-color: #334155 !important;
           }
           
           /* Table styles */
@@ -389,29 +469,21 @@ export default function ViewInvoice() {
             display: table-header-group;
           }
           
-          /* Footer stays at bottom */
-          .print\\:break-inside-avoid {
+          tbody tr:nth-child(even) {
+            background-color: transparent;
+          }
+          
+          /* Ensure images print */
+          img {
+            max-width: 100%;
+            page-break-inside: avoid;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          
+          /* Prevent page breaks in key sections */
+          .bg-slate-800 {
             page-break-inside: avoid !important;
-          }
-          
-          /* Card shadow removal */
-          .print\\:shadow-none,
-          .shadow-lg,
-          .shadow-md {
-            box-shadow: none !important;
-          }
-          
-          .print\\:border-0 {
-            border: 0 !important;
-          }
-          
-          /* Spacing adjustments */
-          .print\\:p-0 {
-            padding: 0 !important;
-          }
-          
-          .print\\:pt-8 {
-            padding-top: 2rem !important;
           }
         }
       `}</style>
