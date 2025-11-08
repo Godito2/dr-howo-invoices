@@ -106,6 +106,11 @@ export default function ViewInvoice() {
             display: flex;
             justify-content: space-between;
             margin: 20px 0;
+            position: relative; /* Added for watermark */
+          }
+          .invoice-details > div {
+            position: relative; /* Ensure children stack above watermark */
+            z-index: 10;
           }
           .detail-section {
             font-size: 13px;
@@ -121,6 +126,8 @@ export default function ViewInvoice() {
             border-collapse: collapse;
             margin: 20px 0;
             border: 2px solid #cbd5e1;
+            position: relative; /* Ensure table stacks above watermark */
+            z-index: 10;
           }
           th, td {
             border: 2px solid #cbd5e1;
@@ -154,6 +161,8 @@ export default function ViewInvoice() {
             padding: 15px;
             margin: 20px 0;
             border-radius: 5px;
+            position: relative; /* Ensure notes stacks above watermark */
+            z-index: 10;
           }
           .notes h3 {
             font-size: 13px;
@@ -198,6 +207,24 @@ export default function ViewInvoice() {
             padding-top: 15px;
             border-top: 1px solid #334155;
           }
+          .watermark-section { /* Added for watermark in Word export */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 0;
+          }
+          .watermark-section img {
+            width: 320px; /* Equivalent to w-80 in Tailwind */
+            height: 320px; /* Equivalent to h-80 in Tailwind */
+            object-fit: contain;
+          }
         </style>
       </head>
       <body>
@@ -222,6 +249,11 @@ export default function ViewInvoice() {
         <h2 class="invoice-title">PROFORMA INVOICE</h2>
 
         <div class="invoice-details">
+          ${company?.watermark_url ? `
+            <div class="watermark-section">
+              <img src="${company.watermark_url}" alt="Watermark">
+            </div>
+          ` : ''}
           <div class="detail-section">
             <p><span class="detail-label">Invoice Number:</span> ${invoice.invoice_number}</p>
             <p><span class="detail-label">Date:</span> ${invoice.invoice_date ? format(new Date(invoice.invoice_date), "MMMM d, yyyy") : ''}</p>
@@ -498,8 +530,31 @@ export default function ViewInvoice() {
             ></div>
 
             {/* Invoice Details */}
-            <div className="p-6 space-y-4">
-              <div className="flex justify-between items-start">
+            <div className="p-6 space-y-4 relative">
+              {/* Watermark in Invoice Details Section */}
+              {company?.watermark_url && (
+                <div 
+                  className="absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center pointer-events-none"
+                  style={{
+                    opacity: 0.05,
+                    WebkitPrintColorAdjust: 'exact',
+                    printColorAdjust: 'exact'
+                  }}
+                >
+                  <img
+                    src={company.watermark_url}
+                    alt="Watermark"
+                    className="w-80 h-80 object-contain"
+                    style={{
+                      WebkitPrintColorAdjust: 'exact',
+                      printColorAdjust: 'exact',
+                      opacity: 0.05
+                    }}
+                  />
+                </div>
+              )}
+
+              <div className="flex justify-between items-start relative z-10">
                 <div>
                   <h2 className="text-2xl font-bold text-blue-600 mb-3">PROFORMA INVOICE</h2>
                   <div className="space-y-1 text-sm">
@@ -522,7 +577,7 @@ export default function ViewInvoice() {
               </div>
 
               {/* Items Table */}
-              <div className="border-2 border-slate-300 rounded-lg overflow-hidden">
+              <div className="border-2 border-slate-300 rounded-lg overflow-hidden relative z-10">
                 <Table>
                   <TableHeader>
                     <TableRow 
@@ -584,7 +639,7 @@ export default function ViewInvoice() {
               {/* Notes */}
               {invoice.notes && (
                 <div 
-                  className="bg-slate-50 p-3 rounded"
+                  className="bg-slate-50 p-3 rounded relative z-10"
                   style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#f8fafc'}}
                 >
                   <h3 className="font-semibold text-slate-700 mb-1 text-sm">Notes</h3>
