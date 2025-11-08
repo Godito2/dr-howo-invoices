@@ -13,6 +13,7 @@ export default function CompanyProfile() {
   const queryClient = useQueryClient();
   const [success, setSuccess] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadingWatermark, setUploadingWatermark] = useState(false);
 
   const { data: profiles = [], isLoading } = useQuery({
     queryKey: ['company-profile'],
@@ -24,6 +25,7 @@ export default function CompanyProfile() {
   const [formData, setFormData] = useState({
     company_name: "",
     logo_url: "",
+    watermark_url: "",
     phone_numbers: "",
     physical_address: "",
     tin_number: "",
@@ -73,6 +75,20 @@ export default function CompanyProfile() {
       console.error("Error uploading logo:", error);
     }
     setUploading(false);
+  };
+
+  const handleWatermarkUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploadingWatermark(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      handleInputChange('watermark_url', file_url);
+    } catch (error) {
+      console.error("Error uploading watermark:", error);
+    }
+    setUploadingWatermark(false);
   };
 
   const handleSubmit = (e) => {
@@ -171,6 +187,72 @@ export default function CompanyProfile() {
                   </label>
                   <p className="text-sm text-slate-500 mt-2">
                     Upload your company logo (PNG, JPG recommended). Max size: 5MB. Best dimensions: 500x500px for square logo.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Watermark Section */}
+          <Card className="border-none shadow-md">
+            <CardHeader>
+              <CardTitle>Watermark Logo (Optional)</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center gap-6">
+                {formData.watermark_url ? (
+                  <div className="relative">
+                    <img
+                      src={formData.watermark_url}
+                      alt="Watermark Logo"
+                      className="w-32 h-32 object-contain border-2 border-slate-200 rounded-lg bg-white p-2"
+                    />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      className="absolute -top-2 -right-2"
+                      onClick={() => handleInputChange('watermark_url', '')}
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="w-32 h-32 border-2 border-dashed border-slate-300 rounded-lg flex items-center justify-center bg-slate-50">
+                    <span className="text-xs text-slate-400 text-center px-2">No Watermark</span>
+                  </div>
+                )}
+                <div className="flex-1">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleWatermarkUpload}
+                    className="hidden"
+                    id="watermark-upload"
+                    disabled={uploadingWatermark}
+                  />
+                  <label htmlFor="watermark-upload">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      disabled={uploadingWatermark}
+                      onClick={() => document.getElementById('watermark-upload').click()}
+                    >
+                      {uploadingWatermark ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Uploading...
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Upload Watermark
+                        </>
+                      )}
+                    </Button>
+                  </label>
+                  <p className="text-sm text-slate-500 mt-2">
+                    Upload a watermark logo that will appear as a subtle background on invoices. PNG with transparency recommended. Best dimensions: 500x500px.
                   </p>
                 </div>
               </div>

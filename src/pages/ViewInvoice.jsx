@@ -1,3 +1,4 @@
+
 import React, { useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
@@ -403,202 +404,228 @@ export default function ViewInvoice() {
 
       {/* Invoice Content */}
       <div className="max-w-5xl mx-auto p-4 md:p-8 print:p-0" ref={printRef}>
-        <Card className="bg-white shadow-lg print:shadow-none print:border-0">
-          {/* Header with Logo and Company Info */}
-          <div className="p-6 pb-4 print:pt-8">
-            <div className="flex justify-between items-start mb-4">
-              {/* Logo */}
-              <div className="flex-shrink-0">
-                {company?.logo_url ? (
-                  <img
-                    src={company.logo_url}
-                    alt="Company Logo"
-                    className="w-24 h-24 object-contain border-2 border-slate-800 p-1 bg-white"
-                    style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}
-                  />
-                ) : (
-                  <div className="w-24 h-24 border-2 border-slate-800 flex items-center justify-center bg-white">
-                    <span className="text-lg font-bold">LOGO</span>
-                  </div>
-                )}
-              </div>
+        <Card className="bg-white shadow-lg print:shadow-none print:border-0 relative overflow-hidden">
+          {/* Watermark - centered and subtle */}
+          {company?.watermark_url && (
+            <div 
+              className="absolute inset-0 flex items-center justify-center pointer-events-none z-0"
+              style={{
+                opacity: 0.08,
+                WebkitPrintColorAdjust: 'exact',
+                printColorAdjust: 'exact'
+              }}
+            >
+              <img
+                src={company.watermark_url}
+                alt="Watermark"
+                className="max-w-md max-h-md object-contain"
+                style={{
+                  WebkitPrintColorAdjust: 'exact',
+                  printColorAdjust: 'exact',
+                  opacity: 0.08
+                }}
+              />
+            </div>
+          )}
 
-              {/* Company Name */}
-              <div className="flex-1 text-center px-4">
-                <h1 className="text-4xl font-black text-slate-900 tracking-tight uppercase mb-1">
-                  {company?.company_name?.split(',')[0] || 'DR HOWO'}
-                </h1>
-                <h2 className="text-xl font-bold text-slate-800 tracking-wide uppercase mb-3">
-                  {company?.company_name?.split(',')[1]?.trim() || 'EMENS GROUP LIMITED'}
-                </h2>
-                <div className="text-xs font-medium text-slate-700">
-                  {company?.phone_numbers && (
-                    <span>Simu: {company.phone_numbers}</span>
-                  )}
-                  {company?.tin_number && (
-                    <span className="ml-2">| TIN NO: {company.tin_number}</span>
-                  )}
-                </div>
-              </div>
-
-              {/* QR Code */}
-              <div className="flex-shrink-0 text-center">
-                {invoice.qr_code_data && (
-                  <div>
-                    <img 
-                      src={invoice.qr_code_data} 
-                      alt="QR Code" 
-                      className="w-20 h-20 mb-1"
+          {/* All content with relative positioning to appear above watermark */}
+          <div className="relative z-10">
+            {/* Header with Logo and Company Info */}
+            <div className="p-6 pb-4 print:pt-8">
+              <div className="flex justify-between items-start mb-4">
+                {/* Logo */}
+                <div className="flex-shrink-0">
+                  {company?.logo_url ? (
+                    <img
+                      src={company.logo_url}
+                      alt="Company Logo"
+                      className="w-24 h-24 object-contain border-2 border-slate-800 p-1 bg-white"
                       style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}
                     />
-                    <p className="text-xs text-slate-500">Scan to follow us</p>
+                  ) : (
+                    <div className="w-24 h-24 border-2 border-slate-800 flex items-center justify-center bg-white">
+                      <span className="text-lg font-bold">LOGO</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Company Name */}
+                <div className="flex-1 text-center px-4">
+                  <h1 className="text-4xl font-black text-slate-900 tracking-tight uppercase mb-1">
+                    {company?.company_name?.split(',')[0] || 'DR HOWO'}
+                  </h1>
+                  <h2 className="text-xl font-bold text-slate-800 tracking-wide uppercase mb-3">
+                    {company?.company_name?.split(',')[1]?.trim() || 'EMENS GROUP LIMITED'}
+                  </h2>
+                  <div className="text-xs font-medium text-slate-700">
+                    {company?.phone_numbers && (
+                      <span>Simu: {company.phone_numbers}</span>
+                    )}
+                    {company?.tin_number && (
+                      <span className="ml-2">| TIN NO: {company.tin_number}</span>
+                    )}
                   </div>
-                )}
-              </div>
-            </div>
-            
-            {/* Physical Address */}
-            {company?.physical_address && (
-              <div className="text-xs text-slate-600 text-center">
-                <p>{company.physical_address}</p>
-              </div>
-            )}
-          </div>
+                </div>
 
-          {/* Black Line Separator - 1mm */}
-          <div 
-            className="bg-black" 
-            style={{height: '1mm', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#000000'}}
-          ></div>
-
-          {/* Invoice Details */}
-          <div className="p-6 space-y-4">
-            <div className="flex justify-between items-start">
-              <div>
-                <h2 className="text-2xl font-bold text-blue-600 mb-3">PROFORMA INVOICE</h2>
-                <div className="space-y-1 text-sm">
-                  <p><span className="font-semibold">Invoice Number:</span> {invoice.invoice_number}</p>
-                  <p><span className="font-semibold">Date:</span> {invoice.invoice_date && format(new Date(invoice.invoice_date), "MMMM d, yyyy")}</p>
-                  {invoice.delivery_date && (
-                    <p><span className="font-semibold">Expected Delivery:</span> {format(new Date(invoice.delivery_date), "MMMM d, yyyy")}</p>
+                {/* QR Code */}
+                <div className="flex-shrink-0 text-center">
+                  {invoice.qr_code_data && (
+                    <div>
+                      <img 
+                        src={invoice.qr_code_data} 
+                        alt="QR Code" 
+                        className="w-20 h-20 mb-1"
+                        style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}
+                      />
+                      <p className="text-xs text-slate-500">Scan to follow us</p>
+                    </div>
                   )}
                 </div>
               </div>
-              <div className="text-right">
-                <h3 className="font-semibold text-slate-700 mb-2">Bill To:</h3>
-                <div className="space-y-1 text-sm">
-                  <p className="font-semibold">{invoice.customer_name}</p>
-                  {invoice.customer_phone && <p>{invoice.customer_phone}</p>}
-                  {invoice.customer_email && <p>{invoice.customer_email}</p>}
-                  {invoice.address && <p>{invoice.address}</p>}
+              
+              {/* Physical Address */}
+              {company?.physical_address && (
+                <div className="text-xs text-slate-600 text-center">
+                  <p>{company.physical_address}</p>
                 </div>
-              </div>
+              )}
             </div>
 
-            {/* Items Table */}
-            <div className="border-2 border-slate-300 rounded-lg overflow-hidden">
-              <Table>
-                <TableHeader>
-                  <TableRow 
-                    className="bg-slate-50"
-                    style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#f8fafc'}}
-                  >
-                    <TableHead className="font-bold w-16 border-r-2 border-slate-300">Item</TableHead>
-                    <TableHead className="font-bold border-r-2 border-slate-300">Description</TableHead>
-                    <TableHead className="font-bold text-center w-28 border-r-2 border-slate-300">Quantity<br/>(Units)</TableHead>
-                    <TableHead className="font-bold text-right w-32 border-r-2 border-slate-300">Unit<br/>Price</TableHead>
-                    <TableHead className="font-bold text-right w-32 border-r-2 border-slate-300">Delivery<br/>Price</TableHead>
-                    <TableHead className="font-bold text-right w-32">Total</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {invoice.items?.map((item, idx) => (
-                    <TableRow key={idx} className="border-t border-slate-300">
-                      <TableCell className="font-bold text-center align-top pt-4 border-r-2 border-slate-300">
-                        {idx + 1}
-                      </TableCell>
-                      <TableCell className="align-top py-3 border-r-2 border-slate-300">
-                        {item.images && item.images.length > 0 && (
-                          <div className="mb-2 flex gap-2">
-                            {item.images.map((img, imgIdx) => (
-                              <img
-                                key={imgIdx}
-                                src={img}
-                                alt={`${item.item} - ${imgIdx + 1}`}
-                                className="w-24 h-24 object-cover rounded border border-slate-300"
-                                style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}
-                              />
-                            ))}
-                          </div>
-                        )}
-                        <div className="font-bold text-sm mb-1">{item.item}</div>
-                        <div className="text-xs whitespace-pre-wrap text-slate-700 leading-relaxed">
-                          {item.description}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-center align-top pt-4 border-r-2 border-slate-300">{item.quantity}</TableCell>
-                      <TableCell className="text-right align-top pt-4 border-r-2 border-slate-300">{currencySymbol}{item.price?.toLocaleString()}</TableCell>
-                      <TableCell className="text-right align-top pt-4 border-r-2 border-slate-300">{currencySymbol}{(item.delivery_price || 0).toLocaleString()}</TableCell>
-                      <TableCell className="text-right font-semibold align-top pt-4">{currencySymbol}{item.total?.toLocaleString()}</TableCell>
+            {/* Black Line Separator - 1mm */}
+            <div 
+              className="bg-black" 
+              style={{height: '1mm', WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#000000'}}
+            ></div>
+
+            {/* Invoice Details */}
+            <div className="p-6 space-y-4">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h2 className="text-2xl font-bold text-blue-600 mb-3">PROFORMA INVOICE</h2>
+                  <div className="space-y-1 text-sm">
+                    <p><span className="font-semibold">Invoice Number:</span> {invoice.invoice_number}</p>
+                    <p><span className="font-semibold">Date:</span> {invoice.invoice_date && format(new Date(invoice.invoice_date), "MMMM d, yyyy")}</p>
+                    {invoice.delivery_date && (
+                      <p><span className="font-semibold">Expected Delivery:</span> {format(new Date(invoice.delivery_date), "MMMM d, yyyy")}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <h3 className="font-semibold text-slate-700 mb-2">Bill To:</h3>
+                  <div className="space-y-1 text-sm">
+                    <p className="font-semibold">{invoice.customer_name}</p>
+                    {invoice.customer_phone && <p>{invoice.customer_phone}</p>}
+                    {invoice.customer_email && <p>{invoice.customer_email}</p>}
+                    {invoice.address && <p>{invoice.address}</p>}
+                  </div>
+                </div>
+              </div>
+
+              {/* Items Table */}
+              <div className="border-2 border-slate-300 rounded-lg overflow-hidden">
+                <Table>
+                  <TableHeader>
+                    <TableRow 
+                      className="bg-slate-50"
+                      style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#f8fafc'}}
+                    >
+                      <TableHead className="font-bold w-16 border-r-2 border-slate-300">Item</TableHead>
+                      <TableHead className="font-bold border-r-2 border-slate-300">Description</TableHead>
+                      <TableHead className="font-bold text-center w-28 border-r-2 border-slate-300">Quantity<br/>(Units)</TableHead>
+                      <TableHead className="font-bold text-right w-32 border-r-2 border-slate-300">Unit<br/>Price</TableHead>
+                      <TableHead className="font-bold text-right w-32 border-r-2 border-slate-300">Delivery<br/>Price</TableHead>
+                      <TableHead className="font-bold text-right w-32">Total</TableHead>
                     </TableRow>
-                  ))}
-                  <TableRow 
-                    className="bg-blue-50 font-bold border-t-2 border-slate-300"
-                    style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#eff6ff'}}
-                  >
-                    <TableCell colSpan={5} className="text-right">TOTAL AMOUNT</TableCell>
-                    <TableCell className="text-right text-lg text-blue-600">
-                      {currencySymbol}{invoice.total_amount?.toLocaleString()}
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {invoice.items?.map((item, idx) => (
+                      <TableRow key={idx} className="border-t border-slate-300">
+                        <TableCell className="font-bold text-center align-top pt-4 border-r-2 border-slate-300">
+                          {idx + 1}
+                        </TableCell>
+                        <TableCell className="align-top py-3 border-r-2 border-slate-300">
+                          {item.images && item.images.length > 0 && (
+                            <div className="mb-2 flex gap-2">
+                              {item.images.map((img, imgIdx) => (
+                                <img
+                                  key={imgIdx}
+                                  src={img}
+                                  alt={`${item.item} - ${imgIdx + 1}`}
+                                  className="w-24 h-24 object-cover rounded border border-slate-300"
+                                  style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact'}}
+                                />
+                              ))}
+                            </div>
+                          )}
+                          <div className="font-bold text-sm mb-1">{item.item}</div>
+                          <div className="text-xs whitespace-pre-wrap text-slate-700 leading-relaxed">
+                            {item.description}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center align-top pt-4 border-r-2 border-slate-300">{item.quantity}</TableCell>
+                        <TableCell className="text-right align-top pt-4 border-r-2 border-slate-300">{currencySymbol}{item.price?.toLocaleString()}</TableCell>
+                        <TableCell className="text-right align-top pt-4 border-r-2 border-slate-300">{currencySymbol}{(item.delivery_price || 0).toLocaleString()}</TableCell>
+                        <TableCell className="text-right font-semibold align-top pt-4">{currencySymbol}{item.total?.toLocaleString()}</TableCell>
+                      </TableRow>
+                    ))}
+                    <TableRow 
+                      className="bg-blue-50 font-bold border-t-2 border-slate-300"
+                      style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#eff6ff'}}
+                    >
+                      <TableCell colSpan={5} className="text-right">TOTAL AMOUNT</TableCell>
+                      <TableCell className="text-right text-lg text-blue-600">
+                        {currencySymbol}{invoice.total_amount?.toLocaleString()}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </div>
+
+              {/* Notes */}
+              {invoice.notes && (
+                <div 
+                  className="bg-slate-50 p-3 rounded"
+                  style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#f8fafc'}}
+                >
+                  <h3 className="font-semibold text-slate-700 mb-1 text-sm">Notes</h3>
+                  <div className="text-xs text-slate-600 whitespace-pre-wrap space-y-0.5">
+                    {invoice.notes.split('\n').map((line, idx) => (
+                      <p key={idx}>{idx + 1}. {line}</p>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Notes */}
-            {invoice.notes && (
-              <div 
-                className="bg-slate-50 p-3 rounded"
-                style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#f8fafc'}}
-              >
-                <h3 className="font-semibold text-slate-700 mb-1 text-sm">Notes</h3>
-                <div className="text-xs text-slate-600 whitespace-pre-wrap space-y-0.5">
-                  {invoice.notes.split('\n').map((line, idx) => (
-                    <p key={idx}>{idx + 1}. {line}</p>
-                  ))}
+            {/* Bank Information Footer */}
+            <div 
+              className="bg-slate-800 text-white p-4"
+              style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#1e293b', color: '#ffffff'}}
+            >
+              <h3 className="font-bold text-sm mb-2 uppercase">Bank Information</h3>
+              <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-xs">
+                <div>
+                  <p className="text-slate-400 text-xs" style={{color: '#94a3b8'}}>BENEFICIARY</p>
+                  <p className="font-semibold">{company?.company_name || 'Dr Howo, Emens Group Limited'}</p>
+                </div>
+                <div>
+                  <p className="text-slate-400 text-xs" style={{color: '#94a3b8'}}>ACCOUNT NUMBER</p>
+                  <p className="font-semibold">{company?.bank_account_number || '0150943104200'}</p>
+                </div>
+                <div>
+                  <p className="text-slate-400 text-xs" style={{color: '#94a3b8'}}>BRANCH NAME</p>
+                  <p className="font-semibold">{company?.bank_branch || 'TABATA'}</p>
+                </div>
+                <div>
+                  <p className="text-slate-400 text-xs" style={{color: '#94a3b8'}}>BANKERS & ADDRESS</p>
+                  <p className="font-semibold">
+                    {company?.bank_name || 'CRDB'}, {company?.bank_address || 'DAR ES SALAAM'}
+                  </p>
                 </div>
               </div>
-            )}
-          </div>
-
-          {/* Bank Information Footer */}
-          <div 
-            className="bg-slate-800 text-white p-4"
-            style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#1e293b', color: '#ffffff'}}
-          >
-            <h3 className="font-bold text-sm mb-2 uppercase">Bank Information</h3>
-            <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-xs">
-              <div>
-                <p className="text-slate-400 text-xs" style={{color: '#94a3b8'}}>BENEFICIARY</p>
-                <p className="font-semibold">{company?.company_name || 'Dr Howo, Emens Group Limited'}</p>
+              <div className="mt-3 pt-2 border-t border-slate-700 text-center text-xs text-slate-400" style={{borderTopColor: '#334155', color: '#94a3b8'}}>
+                <p>Thank you for your business! For inquiries, please contact us.</p>
               </div>
-              <div>
-                <p className="text-slate-400 text-xs" style={{color: '#94a3b8'}}>ACCOUNT NUMBER</p>
-                <p className="font-semibold">{company?.bank_account_number || '0150943104200'}</p>
-              </div>
-              <div>
-                <p className="text-slate-400 text-xs" style={{color: '#94a3b8'}}>BRANCH NAME</p>
-                <p className="font-semibold">{company?.bank_branch || 'TABATA'}</p>
-              </div>
-              <div>
-                <p className="text-slate-400 text-xs" style={{color: '#94a3b8'}}>BANKERS & ADDRESS</p>
-                <p className="font-semibold">
-                  {company?.bank_name || 'CRDB'}, {company?.bank_address || 'DAR ES SALAAM'}
-                </p>
-              </div>
-            </div>
-            <div className="mt-3 pt-2 border-t border-slate-700 text-center text-xs text-slate-400" style={{borderTopColor: '#334155', color: '#94a3b8'}}>
-              <p>Thank you for your business! For inquiries, please contact us.</p>
             </div>
           </div>
         </Card>
