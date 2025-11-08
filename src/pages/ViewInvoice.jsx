@@ -216,7 +216,7 @@ export default function ViewInvoice() {
             display: flex;
             align-items: center;
             justify-content: center;
-            opacity: 0.05;
+            opacity: 0.10;
             pointer-events: none;
             z-index: 0;
           }
@@ -442,7 +442,7 @@ export default function ViewInvoice() {
             <div 
               className="absolute inset-0 flex items-center justify-center pointer-events-none z-0"
               style={{
-                opacity: 0.08,
+                opacity: 0.10,
                 WebkitPrintColorAdjust: 'exact',
                 printColorAdjust: 'exact'
               }}
@@ -454,7 +454,7 @@ export default function ViewInvoice() {
                 style={{
                   WebkitPrintColorAdjust: 'exact',
                   printColorAdjust: 'exact',
-                  opacity: 0.08
+                  opacity: 0.10
                 }}
               />
             </div>
@@ -536,7 +536,7 @@ export default function ViewInvoice() {
                 <div 
                   className="absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center pointer-events-none"
                   style={{
-                    opacity: 0.05,
+                    opacity: 0.10,
                     WebkitPrintColorAdjust: 'exact',
                     printColorAdjust: 'exact'
                   }}
@@ -548,7 +548,7 @@ export default function ViewInvoice() {
                     style={{
                       WebkitPrintColorAdjust: 'exact',
                       printColorAdjust: 'exact',
-                      opacity: 0.05
+                      opacity: 0.10
                     }}
                   />
                 </div>
