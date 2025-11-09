@@ -39,8 +39,8 @@ export default function ViewInvoice() {
 
   // Set document title for PDF filename
   useEffect(() => {
-    if (invoice) {
-      document.title = `Dr Howo Invoices ${invoice.invoice_number}`;
+    if (invoice?.invoice_number) {
+      document.title = invoice.invoice_number;
     }
     return () => {
       document.title = 'Dr Howo';
