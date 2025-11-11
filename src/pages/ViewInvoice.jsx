@@ -1,3 +1,4 @@
+
 import React, { useRef, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
@@ -289,12 +290,12 @@ export default function ViewInvoice() {
         <table>
           <thead>
             <tr>
-              <th style="width: 50px;">Item</th>
+              <th style="width: 35px;">Item</th>
               <th>Description</th>
-              <th style="width: 100px;">Quantity<br/>(Units)</th>
-              <th style="width: 120px;">Unit Price</th>
-              <th style="width: 120px;">Delivery Price</th>
-              <th style="width: 120px;">Total</th>
+              <th style="width: 60px;">Quantity<br/>(Units)</th>
+              <th style="width: 80px;">Unit Price</th>
+              <th style="width: 80px;">Delivery Price</th>
+              <th style="width: 90px;">Total</th>
             </tr>
           </thead>
           <tbody>
@@ -578,12 +579,12 @@ export default function ViewInvoice() {
                     <TableRow 
                       style={{WebkitPrintColorAdjust: 'exact', printColorAdjust: 'exact', backgroundColor: '#f8f8f8'}}
                     >
-                      <TableHead className="font-bold w-16 border-r-2" style={{borderColor: '#002b5c', color: '#222222'}}>Item</TableHead>
+                      <TableHead className="font-bold w-12 border-r-2" style={{borderColor: '#002b5c', color: '#222222'}}>Item</TableHead>
                       <TableHead className="font-bold border-r-2" style={{borderColor: '#002b5c', color: '#222222'}}>Description</TableHead>
-                      <TableHead className="font-bold text-center w-28 border-r-2" style={{borderColor: '#002b5c', color: '#222222'}}>Quantity<br/>(Units)</TableHead>
-                      <TableHead className="font-bold text-right w-32 border-r-2" style={{borderColor: '#002b5c', color: '#222222'}}>Unit<br/>Price</TableHead>
-                      <TableHead className="font-bold text-right w-32 border-r-2" style={{borderColor: '#002b5c', color: '#222222'}}>Delivery<br/>Price</TableHead>
-                      <TableHead className="font-bold text-right w-32" style={{color: '#222222'}}>Total</TableHead>
+                      <TableHead className="font-bold text-center w-20 border-r-2" style={{borderColor: '#002b5c', color: '#222222'}}>Quantity<br/>(Units)</TableHead>
+                      <TableHead className="font-bold text-right w-24 border-r-2" style={{borderColor: '#002b5c', color: '#222222'}}>Unit<br/>Price</TableHead>
+                      <TableHead className="font-bold text-right w-24 border-r-2" style={{borderColor: '#002b5c', color: '#222222'}}>Delivery<br/>Price</TableHead>
+                      <TableHead className="font-bold text-right w-28" style={{color: '#222222'}}>Total</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
