@@ -252,7 +252,8 @@ export default function ViewInvoice() {
             ${company?.logo_url ? `<img src="${company.logo_url}" alt="Logo" class="logo">` : '<div style="width: 100px; height: 100px; border: 2px solid #002b5c; text-align: center; line-height: 100px; font-weight: bold;">LOGO</div>'}
           </div>
           <div class="company-info">
-            <h1 class="company-name">${company?.company_name?.split(',')[1]?.trim() || 'EMENS GROUP LIMITED'}</h1>
+            <h1 class="company-name">${company?.company_name?.split(',')[0] || 'DR HOWO'}</h1>
+            <h2 class="company-subtitle">${company?.company_name?.split(',')[1]?.trim() || 'EMENS GROUP LIMITED'}</h2>
             <div class="company-details">
               ${company?.phone_numbers ? `Simu: ${company.phone_numbers}` : ''}
               ${company?.tin_number ? ` | TIN NO: ${company.tin_number}` : ''}
@@ -501,9 +502,12 @@ export default function ViewInvoice() {
 
                 {/* Company Name */}
                 <div className="flex-1 text-center px-4">
-                  <h1 className="text-4xl font-black tracking-tight uppercase mb-3" style={{color: '#002b5c'}}>
-                    {company?.company_name?.split(',')[1]?.trim() || 'EMENS GROUP LIMITED'}
+                  <h1 className="text-4xl font-black tracking-tight uppercase mb-1" style={{color: '#002b5c'}}>
+                    {company?.company_name?.split(',')[0] || 'DR HOWO'}
                   </h1>
+                  <h2 className="text-xl font-bold tracking-wide uppercase mb-3" style={{color: '#222222'}}>
+                    {company?.company_name?.split(',')[1]?.trim() || 'EMENS GROUP LIMITED'}
+                  </h2>
                   <div className="text-xs font-medium" style={{color: '#222222'}}>
                     {company?.phone_numbers && (
                       <span>Simu: {company.phone_numbers}</span>
