@@ -502,12 +502,9 @@ export default function ViewInvoice() {
 
                 {/* Company Name */}
                 <div className="flex-1 text-center px-4">
-                  <h1 className="text-4xl font-black tracking-tight uppercase mb-1" style={{color: '#002b5c'}}>
-                    {company?.company_name?.split(',')[0] || 'DR HOWO'}
-                  </h1>
-                  <h2 className="text-xl font-bold tracking-wide uppercase mb-3" style={{color: '#222222'}}>
+                  <h1 className="text-4xl font-black tracking-tight uppercase mb-3" style={{color: '#002b5c'}}>
                     {company?.company_name?.split(',')[1]?.trim() || 'EMENS GROUP LIMITED'}
-                  </h2>
+                  </h1>
                   <div className="text-xs font-medium" style={{color: '#222222'}}>
                     {company?.phone_numbers && (
                       <span>Simu: {company.phone_numbers}</span>
