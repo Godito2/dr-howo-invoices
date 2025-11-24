@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
@@ -331,7 +330,7 @@ export default function ViewInvoice() {
           <div class="footer-grid">
             <div>
               <div class="footer-label">BENEFICIARY</div>
-              <div class="footer-value">EMENG GROUP LIMITED</div>
+              <div class="footer-value">EMENS GROUP LIMITED</div>
             </div>
             <div>
               <div class="footer-label">ACCOUNT NUMBER</div>
@@ -656,7 +655,7 @@ export default function ViewInvoice() {
               <div className="grid grid-cols-2 gap-x-8 gap-y-2 text-xs">
                 <div>
                   <p className="text-xs" style={{color: '#f8f8f8'}}>BENEFICIARY</p>
-                  <p className="font-semibold">EMENG GROUP LIMITED</p>
+                  <p className="font-semibold">EMENS GROUP LIMITED</p>
                 </div>
                 <div>
                   <p className="text-xs" style={{color: '#f8f8f8'}}>ACCOUNT NUMBER</p>
