@@ -64,7 +64,7 @@ export default function ItemsTable({ items, onChange, currency = "USD" }) {
   };
 
   const addItem = () => {
-    onChange([...items, { item: "", description: "", quantity: 1, price: 0, delivery_price: 0, total: 0, images: [] }]);
+    onChange([...items, { item: "", description: "", quantity: 1, price: 0, delivery_price: 0, vat: 18, total: 0, images: [] }]);
   };
 
   const removeItem = (index) => {
