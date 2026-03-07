@@ -1,7 +1,6 @@
-
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -10,9 +9,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, Save, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import ItemsTable from "../components/invoices/ItemsTable";
 import ImageUploader from "../components/invoices/ImageUploader";
+import { useRetrySubmit } from "../components/shared/useRetrySubmit";
+import SubmitErrorAlert from "../components/shared/SubmitErrorAlert";
 
 export default function CreateInvoice() {
   const navigate = useNavigate();
