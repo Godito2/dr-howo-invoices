@@ -3,7 +3,6 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Trash2, Upload, X, Loader2 } from "lucide-react";
 
 export default function ItemsTable({ items, onChange, currency = "USD" }) {
@@ -19,14 +18,13 @@ export default function ItemsTable({ items, onChange, currency = "USD" }) {
       [field]: value
     };
 
-    if (field === 'quantity' || field === 'price' || field === 'delivery_price' || field === 'vat') {
+    if (field === 'quantity' || field === 'price' || field === 'delivery_price') {
       const currentItem = newItems[index];
       const quantity = parseFloat(currentItem.quantity) || 0;
       const price = parseFloat(currentItem.price) || 0;
       const deliveryPrice = parseFloat(currentItem.delivery_price) || 0;
-      const vat = parseFloat(field === 'vat' ? value : currentItem.vat ?? 18) || 0;
-      const subtotal = (quantity * price) + deliveryPrice;
-      newItems[index].total = subtotal * (1 + vat / 100);
+      
+      newItems[index].total = (quantity * price) + deliveryPrice;
     }
 
     onChange(newItems);
@@ -64,7 +62,7 @@ export default function ItemsTable({ items, onChange, currency = "USD" }) {
   };
 
   const addItem = () => {
-    onChange([...items, { item: "", description: "", quantity: 1, price: 0, delivery_price: 0, vat: 18, total: 0, images: [] }]);
+    onChange([...items, { item: "", description: "", quantity: 1, price: 0, delivery_price: 0, total: 0, images: [] }]);
   };
 
   const removeItem = (index) => {
@@ -125,7 +123,7 @@ export default function ItemsTable({ items, onChange, currency = "USD" }) {
               />
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+            <div className="grid grid-cols-3 gap-4 mb-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Quantity</label>
                 <Input
@@ -146,22 +144,7 @@ export default function ItemsTable({ items, onChange, currency = "USD" }) {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">VAT</label>
-                <Select
-                  value={String(item.vat ?? 18)}
-                  onValueChange={(val) => handleItemChange(index, 'vat', val)}
-                >
-                  <SelectTrigger className="bg-white">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="18">18%</SelectItem>
-                    <SelectItem value="0">0%</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Total (incl. VAT)</label>
+                <label className="text-sm font-medium">Total</label>
                 <Input
                   value={`${currencySymbol}${(item.total || 0).toLocaleString()}`}
                   disabled
