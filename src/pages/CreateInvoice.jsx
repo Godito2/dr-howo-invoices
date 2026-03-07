@@ -17,8 +17,7 @@ import SubmitErrorAlert from "../components/shared/SubmitErrorAlert";
 export default function CreateInvoice() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [error, setError] = useState(null);
-  
+
   const [formData, setFormData] = useState({
     customer_name: "",
     customer_phone: "",
