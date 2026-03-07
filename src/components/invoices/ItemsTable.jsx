@@ -19,13 +19,14 @@ export default function ItemsTable({ items, onChange, currency = "USD" }) {
       [field]: value
     };
 
-    if (field === 'quantity' || field === 'price' || field === 'delivery_price') {
+    if (field === 'quantity' || field === 'price' || field === 'delivery_price' || field === 'vat') {
       const currentItem = newItems[index];
       const quantity = parseFloat(currentItem.quantity) || 0;
       const price = parseFloat(currentItem.price) || 0;
       const deliveryPrice = parseFloat(currentItem.delivery_price) || 0;
-      
-      newItems[index].total = (quantity * price) + deliveryPrice;
+      const vat = parseFloat(field === 'vat' ? value : currentItem.vat ?? 18) || 0;
+      const subtotal = (quantity * price) + deliveryPrice;
+      newItems[index].total = subtotal * (1 + vat / 100);
     }
 
     onChange(newItems);
