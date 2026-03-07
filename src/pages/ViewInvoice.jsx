@@ -21,6 +21,7 @@ import {
 export default function ViewInvoice() {
   const navigate = useNavigate();
   const printRef = useRef();
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const urlParams = new URLSearchParams(window.location.search);
   const invoiceId = urlParams.get('id');
 
