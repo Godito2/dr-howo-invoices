@@ -273,12 +273,12 @@ export default function CreateInvoice() {
             <Button
               type="submit"
               className="bg-blue-600 hover:bg-blue-700"
-              disabled={createInvoiceMutation.isPending}
+              disabled={isSubmitting}
             >
-              {createInvoiceMutation.isPending ? (
+              {isSubmitting ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Creating...
+                  {attemptCount > 1 ? `Retrying (${attemptCount}/3)…` : "Creating..."}
                 </>
               ) : (
                 <>
