@@ -188,34 +188,32 @@ export default function CreateInvoice() {
           {/* Note: The outline removed vehicle_model and vehicle_plate from the delivery card.
               If these fields are still needed, they would require a new card or placement.
               For this task, they are simply omitted from the UI as per instructions. */}
-          {formData.vehicle_model || formData.vehicle_plate ? ( // Render only if data exists
-            <Card className="border-none shadow-md">
-                <CardHeader>
-                    <CardTitle>Vehicle Information (Optional)</CardTitle>
-                </CardHeader>
-                <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="vehicle_model">Vehicle Model</Label>
-                        <Input
-                        id="vehicle_model"
-                        value={formData.vehicle_model}
-                        onChange={(e) => handleInputChange('vehicle_model', e.target.value)}
-                        placeholder="HOWO A7 Truck"
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="vehicle_plate">License Plate</Label>
-                        <Input
-                        id="vehicle_plate"
-                        value={formData.vehicle_plate}
-                        onChange={(e) => handleInputChange('vehicle_plate', e.target.value)}
-                        placeholder="T 123 ABC"
-                        className="font-mono uppercase"
-                        />
-                    </div>
-                </CardContent>
-            </Card>
-          ) : null}
+          <Card className="border-none shadow-md">
+            <CardHeader>
+              <CardTitle>Vehicle Information (Optional)</CardTitle>
+            </CardHeader>
+            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="vehicle_model">Vehicle Model</Label>
+                <Input
+                  id="vehicle_model"
+                  value={formData.vehicle_model}
+                  onChange={(e) => handleInputChange('vehicle_model', e.target.value)}
+                  placeholder="HOWO A7 Truck"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="vehicle_plate">License Plate</Label>
+                <Input
+                  id="vehicle_plate"
+                  value={formData.vehicle_plate}
+                  onChange={(e) => handleInputChange('vehicle_plate', e.target.value)}
+                  placeholder="T 123 ABC"
+                  className="font-mono uppercase"
+                />
+              </div>
+            </CardContent>
+          </Card>
 
 
           {/* Items Table */}

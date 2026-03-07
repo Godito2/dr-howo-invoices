@@ -1,7 +1,8 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { FileText, LayoutDashboard, Plus, Truck, Building2, History } from "lucide-react";
+import { FileText, LayoutDashboard, Plus, Truck, Building2, History, RefreshCw } from "lucide-react";
+import ErrorBoundary from "@/components/shared/ErrorBoundary";
 import {
   Sidebar,
   SidebarContent,
