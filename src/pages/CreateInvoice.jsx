@@ -34,37 +34,31 @@ export default function CreateInvoice() {
     status: "pending"
   });
 
-  const createInvoiceMutation = useMutation({
-    mutationFn: async (data) => {
-      // Generate invoice number
+  const [validationError, setValidationError] = useState(null);
+
+  const { submit, retry, isSubmitting, error, attemptCount, hasLastData } = useRetrySubmit(
+    async (data) => {
       const now = new Date();
       const year = now.getFullYear();
       const month = String(now.getMonth() + 1).padStart(2, '0');
       const random = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
       const invoiceNumber = `DRH-PF-${year}${month}-${random}`;
+      const qrCodeData = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent("https://www.drhowo.com")}`;
 
-      // Generate QR code data URL for website
-      const websiteUrl = `https://www.drhowo.com`;
-      const qrCodeData = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(websiteUrl)}`;
-
-      const invoiceData = {
+      return base44.entities.ProformaInvoice.create({
         ...data,
         invoice_number: invoiceNumber,
         qr_code_data: qrCodeData,
-        total_amount: data.items.reduce((sum, item) => sum + (item.total || 0), 0)
-      };
-
-      return base44.entities.ProformaInvoice.create(invoiceData);
+        total_amount: data.items.reduce((sum, item) => sum + (item.total || 0), 0),
+      });
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['proforma-invoices'] });
-      navigate(createPageUrl("Dashboard"));
-    },
-    onError: (err) => {
-      setError("Failed to create invoice. Please try again.");
-      console.error(err);
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['proforma-invoices'] });
+        navigate(createPageUrl("Dashboard"));
+      },
     }
-  });
+  );
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -72,14 +66,14 @@ export default function CreateInvoice() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError(null);
+    setValidationError(null);
 
     if (!formData.customer_name || formData.items.length === 0) {
-      setError("Please fill in customer name and add at least one item.");
+      setValidationError("Please fill in customer name and add at least one item.");
       return;
     }
 
-    createInvoiceMutation.mutate(formData);
+    submit(formData);
   };
 
   return (
