@@ -11,21 +11,21 @@ export default function ItemsTable({ items, onChange, currency = "USD" }) {
 
   const currencySymbol = currency === "TZS" ? "TZS" : "$";
 
+  const recalcTotal = (item) => {
+    const quantity = parseFloat(item.quantity) || 0;
+    const price = parseFloat(item.price) || 0;
+    const deliveryPrice = parseFloat(item.delivery_price) || 0;
+    const vat = parseFloat(item.vat ?? 18) || 0;
+    const subtotal = (quantity * price) + deliveryPrice;
+    return subtotal * (1 + vat / 100);
+  };
+
   const handleItemChange = (index, field, value) => {
     const newItems = [...items];
-    
-    newItems[index] = {
-      ...newItems[index],
-      [field]: value
-    };
+    newItems[index] = { ...newItems[index], [field]: value };
 
-    if (field === 'quantity' || field === 'price' || field === 'delivery_price') {
-      const currentItem = newItems[index];
-      const quantity = parseFloat(currentItem.quantity) || 0;
-      const price = parseFloat(currentItem.price) || 0;
-      const deliveryPrice = parseFloat(currentItem.delivery_price) || 0;
-      
-      newItems[index].total = (quantity * price) + deliveryPrice;
+    if (['quantity', 'price', 'delivery_price', 'vat'].includes(field)) {
+      newItems[index].total = recalcTotal(newItems[index]);
     }
 
     onChange(newItems);
@@ -40,7 +40,7 @@ export default function ItemsTable({ items, onChange, currency = "USD" }) {
       const uploadPromises = files.map(file => base44.integrations.Core.UploadFile({ file }));
       const results = await Promise.all(uploadPromises);
       const newImageUrls = results.map(r => r.file_url);
-      
+
       const newItems = [...items];
       newItems[index] = {
         ...newItems[index],
@@ -63,7 +63,7 @@ export default function ItemsTable({ items, onChange, currency = "USD" }) {
   };
 
   const addItem = () => {
-    onChange([...items, { item: "", description: "", quantity: 1, price: 0, delivery_price: 0, total: 0, images: [] }]);
+    onChange([...items, { item: "", description: "", quantity: 1, price: 0, delivery_price: 0, vat: 18, total: 0, images: [] }]);
   };
 
   const removeItem = (index) => {
@@ -124,7 +124,7 @@ export default function ItemsTable({ items, onChange, currency = "USD" }) {
               />
             </div>
 
-            <div className="grid grid-cols-3 gap-4 mb-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Quantity</label>
                 <Input
@@ -145,7 +145,22 @@ export default function ItemsTable({ items, onChange, currency = "USD" }) {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Total</label>
+                <label className="text-sm font-medium">VAT</label>
+                <Select
+                  value={String(item.vat ?? 18)}
+                  onValueChange={(val) => handleItemChange(index, 'vat', val)}
+                >
+                  <SelectTrigger className="bg-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="18">18%</SelectItem>
+                    <SelectItem value="0">0%</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Total (incl. VAT)</label>
                 <Input
                   value={`${currencySymbol}${(item.total || 0).toLocaleString()}`}
                   disabled
@@ -214,7 +229,7 @@ export default function ItemsTable({ items, onChange, currency = "USD" }) {
           Add Item
         </Button>
         <div className="text-right">
-          <p className="text-sm text-slate-600">Total Amount</p>
+          <p className="text-sm text-slate-600">Total Amount (incl. VAT)</p>
           <p className="text-2xl font-bold text-blue-600">{currencySymbol}{totalAmount.toLocaleString()}</p>
         </div>
       </div>
