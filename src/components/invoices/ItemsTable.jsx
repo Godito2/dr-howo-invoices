@@ -125,7 +125,7 @@ export default function ItemsTable({ items, onChange, currency = "USD" }) {
               />
             </div>
 
-            <div className="grid grid-cols-3 gap-4 mb-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Quantity</label>
                 <Input
@@ -146,7 +146,22 @@ export default function ItemsTable({ items, onChange, currency = "USD" }) {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Total</label>
+                <label className="text-sm font-medium">VAT</label>
+                <Select
+                  value={String(item.vat ?? 18)}
+                  onValueChange={(val) => handleItemChange(index, 'vat', val)}
+                >
+                  <SelectTrigger className="bg-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="18">18%</SelectItem>
+                    <SelectItem value="0">0%</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Total (incl. VAT)</label>
                 <Input
                   value={`${currencySymbol}${(item.total || 0).toLocaleString()}`}
                   disabled
