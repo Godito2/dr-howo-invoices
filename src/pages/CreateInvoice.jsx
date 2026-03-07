@@ -94,11 +94,17 @@ export default function CreateInvoice() {
           </div>
         </div>
 
-        {error && (
-          <Alert variant="destructive" className="mb-6">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
+        {validationError && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+            {validationError}
+          </div>
         )}
+        <SubmitErrorAlert
+          error={error}
+          onRetry={retry}
+          isRetrying={isSubmitting}
+          attemptCount={attemptCount}
+        />
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Customer Information */}
