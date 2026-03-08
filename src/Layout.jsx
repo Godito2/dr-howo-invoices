@@ -58,7 +58,7 @@ export default function Layout({ children, currentPageName }) {
 
         <div className="flex-1 overflow-y-auto">
           <p className="text-xs font-medium text-slate-400 uppercase tracking-wider px-4 pt-4 pb-1">Menu</p>
-          <NavLinks />
+          <NavLinks currentPath={location.pathname} onLinkClick={() => {}} />
         </div>
 
         <div className="border-t border-slate-200 p-4 text-xs text-slate-500">
