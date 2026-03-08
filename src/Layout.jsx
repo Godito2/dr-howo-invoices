@@ -1,125 +1,127 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { LayoutDashboard, Plus, Truck, Building2, History, Menu, X } from "lucide-react";
-import ErrorBoundary from "@/components/shared/ErrorBoundary";
+import { LayoutDashboard, Plus, History, Building2, Menu, X, Truck } from "lucide-react";
 
-const navigationItems = [
-  { title: "Dashboard", url: createPageUrl("Dashboard"), icon: LayoutDashboard },
-  { title: "Create Invoice", url: createPageUrl("CreateInvoice"), icon: Plus },
-  { title: "Proforma History", url: createPageUrl("ProformaHistory"), icon: History },
-  { title: "Company Profile", url: createPageUrl("CompanyProfile"), icon: Building2 },
+const navItems = [
+  { title: "Dashboard", page: "Dashboard", icon: LayoutDashboard },
+  { title: "Create Invoice", page: "CreateInvoice", icon: Plus },
+  { title: "Proforma History", page: "ProformaHistory", icon: History },
+  { title: "Company Profile", page: "CompanyProfile", icon: Building2 },
 ];
-
-function NavLinks({ currentPath, onLinkClick }) {
-  return (
-    <nav className="flex flex-col gap-1 p-2">
-      {navigationItems.map((item) => {
-        const isActive = currentPath === item.url;
-        return (
-          <Link
-            key={item.title}
-            to={item.url}
-            onClick={onLinkClick}
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 ${
-              isActive
-                ? "bg-blue-50 text-blue-700"
-                : "text-slate-600 hover:bg-blue-50 hover:text-blue-700"
-            }`}
-          >
-            <item.icon className="w-4 h-4 shrink-0" />
-            <span>{item.title}</span>
-          </Link>
-        );
-      })}
-    </nav>
-  );
-}
 
 export default function Layout({ children, currentPageName }) {
   const location = useLocation();
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex w-full bg-slate-50">
+    <div style={{ display: "flex", minHeight: "100vh", background: "#f8fafc" }}>
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex flex-col w-64 bg-white border-r border-slate-200 shrink-0">
-        <div className="border-b border-slate-200 p-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center shadow-md">
-              <Truck className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <h2 className="font-bold text-slate-900">Dr Howo</h2>
-              <p className="text-xs text-slate-500">Auto Garage Ltd</p>
-            </div>
+      <aside style={{
+        width: 240,
+        background: "#fff",
+        borderRight: "1px solid #e2e8f0",
+        display: "flex",
+        flexDirection: "column",
+        flexShrink: 0,
+      }} className="hidden md:flex">
+        <div style={{ padding: "16px", borderBottom: "1px solid #e2e8f0", display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ width: 36, height: 36, background: "linear-gradient(135deg,#2563eb,#1d4ed8)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <Truck size={20} color="#fff" />
+          </div>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 14, color: "#0f172a" }}>Dr Howo</div>
+            <div style={{ fontSize: 11, color: "#94a3b8" }}>Auto Garage Ltd</div>
           </div>
         </div>
-
-        <div className="flex-1 overflow-y-auto">
-          <p className="text-xs font-medium text-slate-400 uppercase tracking-wider px-4 pt-4 pb-1">Menu</p>
-          <NavLinks currentPath={location.pathname} onLinkClick={() => {}} />
-        </div>
-
-        <div className="border-t border-slate-200 p-4 text-xs text-slate-500">
-          <p className="font-semibold text-slate-700">Dr Howo Auto Garage Ltd</p>
-          <p className="mt-1">NMB Bank Plc</p>
-          <p>Acc: 0123456789</p>
-        </div>
+        <nav style={{ flex: 1, padding: "8px" }}>
+          {navItems.map((item) => {
+            const href = createPageUrl(item.page);
+            const active = location.pathname === href;
+            return (
+              <Link
+                key={item.page}
+                to={href}
+                style={{
+                  display: "flex", alignItems: "center", gap: 10,
+                  padding: "9px 12px", borderRadius: 8, marginBottom: 2,
+                  textDecoration: "none", fontSize: 13, fontWeight: 500,
+                  background: active ? "#eff6ff" : "transparent",
+                  color: active ? "#1d4ed8" : "#475569",
+                }}
+              >
+                <item.icon size={16} />
+                {item.title}
+              </Link>
+            );
+          })}
+        </nav>
       </aside>
 
-      {/* Mobile Overlay */}
-      {mobileOpen && (
+      {/* Mobile overlay */}
+      {open && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 md:hidden"
-          onClick={() => setMobileOpen(false)}
+          onClick={() => setOpen(false)}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", zIndex: 40 }}
         />
       )}
 
-      {/* Mobile Drawer */}
-      <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 flex flex-col transform transition-transform duration-200 md:hidden ${
-          mobileOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <div className="border-b border-slate-200 p-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg flex items-center justify-center">
-              <Truck className="w-5 h-5 text-white" />
+      {/* Mobile drawer */}
+      <aside style={{
+        position: "fixed", top: 0, left: open ? 0 : -260, bottom: 0, width: 240,
+        background: "#fff", borderRight: "1px solid #e2e8f0",
+        display: "flex", flexDirection: "column", zIndex: 50,
+        transition: "left 0.2s ease",
+      }} className="md:hidden">
+        <div style={{ padding: "16px", borderBottom: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ width: 32, height: 32, background: "linear-gradient(135deg,#2563eb,#1d4ed8)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Truck size={16} color="#fff" />
             </div>
-            <div>
-              <h2 className="font-bold text-slate-900 text-sm">Dr Howo</h2>
-              <p className="text-xs text-slate-500">Auto Garage Ltd</p>
-            </div>
+            <span style={{ fontWeight: 700, fontSize: 14, color: "#0f172a" }}>Dr Howo</span>
           </div>
-          <button onClick={() => setMobileOpen(false)} className="p-1 rounded-lg hover:bg-slate-100">
-            <X className="w-5 h-5 text-slate-500" />
+          <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", padding: 4 }}>
+            <X size={20} color="#64748b" />
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto">
-          <NavLinks currentPath={location.pathname} onLinkClick={() => setMobileOpen(false)} />
-        </div>
+        <nav style={{ flex: 1, padding: "8px" }}>
+          {navItems.map((item) => {
+            const href = createPageUrl(item.page);
+            const active = location.pathname === href;
+            return (
+              <Link
+                key={item.page}
+                to={href}
+                onClick={() => setOpen(false)}
+                style={{
+                  display: "flex", alignItems: "center", gap: 10,
+                  padding: "9px 12px", borderRadius: 8, marginBottom: 2,
+                  textDecoration: "none", fontSize: 13, fontWeight: 500,
+                  background: active ? "#eff6ff" : "transparent",
+                  color: active ? "#1d4ed8" : "#475569",
+                }}
+              >
+                <item.icon size={16} />
+                {item.title}
+              </Link>
+            );
+          })}
+        </nav>
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0">
-        {/* Mobile Header */}
-        <header className="bg-white border-b border-slate-200 px-4 py-3 md:hidden flex items-center gap-3">
-          <button
-            onClick={() => setMobileOpen(true)}
-            className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
-          >
-            <Menu className="w-5 h-5 text-slate-600" />
+      {/* Main */}
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+        {/* Mobile header */}
+        <header style={{ background: "#fff", borderBottom: "1px solid #e2e8f0", padding: "12px 16px", display: "flex", alignItems: "center", gap: 12 }} className="md:hidden">
+          <button onClick={() => setOpen(true)} style={{ background: "none", border: "none", cursor: "pointer", padding: 4 }}>
+            <Menu size={22} color="#475569" />
           </button>
-          <h1 className="text-lg font-bold text-slate-900">Dr Howo</h1>
+          <span style={{ fontWeight: 700, fontSize: 16, color: "#0f172a" }}>Dr Howo</span>
         </header>
-
-        <div className="flex-1 overflow-auto">
-          <ErrorBoundary name={currentPageName}>
-            {children}
-          </ErrorBoundary>
+        <div style={{ flex: 1, overflow: "auto" }}>
+          {children}
         </div>
-      </main>
+      </div>
     </div>
   );
 }
