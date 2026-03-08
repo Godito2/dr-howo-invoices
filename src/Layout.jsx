@@ -11,19 +11,16 @@ const navigationItems = [
   { title: "Company Profile", url: createPageUrl("CompanyProfile"), icon: Building2 },
 ];
 
-export default function Layout({ children, currentPageName }) {
-  const location = useLocation();
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  const NavLinks = () => (
+function NavLinks({ currentPath, onLinkClick }) {
+  return (
     <nav className="flex flex-col gap-1 p-2">
       {navigationItems.map((item) => {
-        const isActive = location.pathname === item.url;
+        const isActive = currentPath === item.url;
         return (
           <Link
             key={item.title}
             to={item.url}
-            onClick={() => setMobileOpen(false)}
+            onClick={onLinkClick}
             className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 ${
               isActive
                 ? "bg-blue-50 text-blue-700"
@@ -37,6 +34,11 @@ export default function Layout({ children, currentPageName }) {
       })}
     </nav>
   );
+}
+
+export default function Layout({ children, currentPageName }) {
+  const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <div className="min-h-screen flex w-full bg-slate-50">
