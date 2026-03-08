@@ -97,7 +97,7 @@ export default function Layout({ children, currentPageName }) {
           </button>
         </div>
         <div className="flex-1 overflow-y-auto">
-          <NavLinks />
+          <NavLinks currentPath={location.pathname} onLinkClick={() => setMobileOpen(false)} />
         </div>
       </aside>
 
