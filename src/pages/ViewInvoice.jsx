@@ -477,6 +477,20 @@ export default function ViewInvoice() {
               <FileText className="w-4 h-4 mr-2" />
               Export to Word
             </Button>
+            <Button
+              variant="default"
+              size="sm"
+              onClick={handleDownloadPDF}
+              disabled={isGeneratingPDF}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              {isGeneratingPDF ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Download className="w-4 h-4 mr-2" />
+              )}
+              {isGeneratingPDF ? "Generating..." : "Download PDF"}
+            </Button>
             <Button variant="outline" size="sm" onClick={handlePrint}>
               <Printer className="w-4 h-4 mr-2" />
               Print / Save PDF
